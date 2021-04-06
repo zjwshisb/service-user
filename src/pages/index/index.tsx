@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Taro from '@tarojs/taro'
 import {View, Input, Button} from '@tarojs/components'
 
 import './index.less'
@@ -10,7 +10,7 @@ const Index = () =>  {
   const [websocket, setWebsocket] = React.useState<WebSocket | undefined>()
 
   React.useEffect(() => {
-    const ws = new WebSocket('ws://192.168.2.143:9090/user/ws')
+    const ws = new WebSocket('ws://localhost:9090/user/ws?token=' + Taro.getStorageSync("token"))
     ws.onopen = e => {
       console.log(e)
     }
