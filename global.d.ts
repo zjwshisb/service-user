@@ -17,3 +17,4 @@ declare const process: {
   }
 }
 declare const BASE_URL: string
+declare const WS_URL: string

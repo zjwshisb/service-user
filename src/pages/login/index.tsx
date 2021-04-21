@@ -2,6 +2,8 @@ import React from 'react'
 import { View } from "@tarojs/components";
 import { AtForm, AtInput, AtButton } from "taro-ui";
 import Taro from "@tarojs/taro"
+import { setToken } from "../../util/auth";
+import { handleLogin } from "../../api";
 
 import './index.less'
 
@@ -11,22 +13,16 @@ const Index = () =>  {
   const [password, setPassword] = React.useState('')
 
   const login = React.useCallback(form => {
-    Taro.request({
-      url: BASE_URL + "/login",
-      data: form,
-      method: 'POST'
-    }).then(res => {
-      if (res.data.success) {
-        Taro.setStorageSync("token", res.data.data.token)
-        Taro.navigateTo({
-          url: '/pages/index/index'
-        })
-      } else {
-        Taro.showToast({
-          title: '账号密码错误',
-          duration: 3
-        })
-      }
+    handleLogin(form).then(res => {
+      setToken(res.data.token)
+      Taro.navigateTo({
+        url: '/pages/index/index'
+      })
+    }).catch(() => {
+      Taro.showToast({
+        title: '账号密码错误',
+        duration: 3
+      })
     })
   } ,[])
 
