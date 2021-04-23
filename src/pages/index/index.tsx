@@ -25,7 +25,7 @@ const Index = () => {
       if (e.data != '') {
         const action: APP.Action = JSON.parse(e.data)
         switch (action.action) {
-          case 'message': {
+          case 'receive-message': {
             const msg = action.data as APP.Message
             setMessages(prev => {
               const newState = prev.slice(0)

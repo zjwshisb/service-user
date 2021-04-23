@@ -7,9 +7,10 @@ export function newAction(content, type: APP.MessageType = "text") : APP.Action<
       content,
       type,
       req_id:createReqId(),
-      is_server: false
+      is_server: false,
+      avatar: ''
     },
     time: (new Date()).getTime(),
-    action: 'message',
+    action: 'send-message',
   }
 }

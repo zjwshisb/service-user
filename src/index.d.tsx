@@ -17,5 +17,6 @@ declare namespace APP {
     type: MessageType,
     is_server: boolean,
     req_id: number,
+    avatar : string
   }
 }

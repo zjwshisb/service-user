@@ -5,7 +5,7 @@ const Index: React.FC<{
   message: APP.Message
 }> = props => {
   return <View className='message-item' data-right={!props.message.is_server}>
-    <Image src='111' className='message-avatar' />
+    <Image src={props.message.avatar} className='message-avatar' />
     <View className='message-content'>
       {props.message.content}
     </View>
