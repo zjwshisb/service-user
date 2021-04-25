@@ -38,7 +38,8 @@ const Index = () =>  {
       <View className='action-content'>
         <AtButton type='primary' size='small' formType='submit' onClick={() => login({
           username,password
-        })} >登录</AtButton>
+        })}
+        >登录</AtButton>
       </View>
     </View>
   )

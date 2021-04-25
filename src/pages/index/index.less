@@ -10,14 +10,14 @@
     padding: 20px 20px;
     background-color: #f5f5f5;
     &>.message-item{
+      display: flex;
+      justify-content: left;
       &:nth-child(n + 2) {
         margin-top: 20px;
       }
-      display: flex;
-      justify-content: left;
       &[data-right=true] {
         flex-direction: row-reverse;
-        &>.message-content{
+        &>.message-content.text{
           background-color: #95EC69;
           color: #0F170A;
         }
@@ -25,21 +25,35 @@
       &>.message-avatar{
         width: 70px;
         height: 70px;
+        &>img{
+          border-radius: 5px;
+        }
       }
       &>.message-content{
         box-sizing: border-box;
         max-width: 405px;
         margin: 0 10px;
-        font-size: 32px;
         line-height: 36px;
-        background-color: #FFFFFF;
-        padding: 17px 10px;
         border-radius: 10px;
+        &>.image{
+          max-width: 100%;
+          width: auto;
+          height: auto;
+          margin: 0;
+          &>img{
+            border-radius: 10px;
+          }
+        }
+      }
+      &>.message-content.text{
+        background-color: #FFFFFF;
+        font-size: 32px;
         word-break: break-all;
+        padding: 17px 10px;
       }
     }
   }
-  &>.input-content{
+  &>.input-area{
     display: flex;
     align-items: center;
     width: 100%;

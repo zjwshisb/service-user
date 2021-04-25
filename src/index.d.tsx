@@ -19,4 +19,10 @@ declare namespace APP {
     req_id: number,
     avatar : string
   }
+
+  export type WebsocketContext = {
+    messages: APP.Message[],
+    websocket?: WebSocket,
+    send?: (a: APP.Action) => void
+  }
 }

@@ -1,20 +1,22 @@
 import React from 'react'
-import {View, Input, Image} from '@tarojs/components'
-import {newAction} from "../../util/action";
+import {View} from '@tarojs/components'
+
+
 import './index.less'
 import MessageItem from "./components/MessageItem/index"
-import Face from '../../asset/img/face.svg'
-import More from '../../asset/img/more.svg'
-import { getMessages } from "../../api";
-import { getToken } from "../../util/auth";
+import {getMessages} from "../../api";
+import {getToken} from "../../util/auth";
+import SendContext from './context'
+import Input from './components/Input'
+
 
 const Index = () => {
+
 
   const [websocket, setWebsocket] = React.useState<WebSocket | undefined>()
 
   const [messages, setMessages] = React.useState<APP.Message[]>([])
 
-  const [value, setValue] = React.useState('')
 
   const connect = React.useCallback(() => {
     const ws = new WebSocket(`${WS_URL}?token=` + getToken())
@@ -54,10 +56,8 @@ const Index = () => {
   }, [connect])
 
 
-  const send = React.useCallback((msg: string) => {
+  const send = React.useCallback((act: APP.Action) => {
     if (websocket) {
-      const act = newAction(msg)
-      setValue('')
       setMessages(prev => {
         const newState = prev.slice(0)
         newState.push(act.data)
@@ -80,24 +80,18 @@ const Index = () => {
   })
 
   return (
-    <View className='index'>
-      <View className='message-content' ref={ref}>
-        {
-          messages.map(v => {
-            return <MessageItem message={v} key={v.req_id} />
-          })
-        }
-      </View>
-      <View className='input-content'>
-        <View className='input'>
-          <Input value={value} onInput={e => setValue(e.detail.value)} onConfirm={e => send(e.detail.value)} />
+    <SendContext.Provider value={send}>
+      <View className='index'>
+        <View className='message-content' ref={ref}>
+          {
+            messages.map(v => {
+              return <MessageItem message={v} key={v.req_id} />
+            })
+          }
         </View>
-        <View className='action'>
-          <Image src={Face} className='icon' />
-          <Image src={More} className='icon' />
-        </View>
-      </View>
+        <Input />
     </View>
+    </SendContext.Provider>
   )
 }
 

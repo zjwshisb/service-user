@@ -1,3 +1,5 @@
+const path = require("path");
+
 const config = {
   projectName: 'wsmobile',
   date: '2021-3-27',
@@ -10,6 +12,9 @@ const config = {
   sourceRoot: 'src',
   outputRoot: 'dist',
   plugins: [],
+  alias: {
+    "@": path.resolve(__dirname, '..', 'src'),
+  },
   defineConstants: {
   },
   copy: {
