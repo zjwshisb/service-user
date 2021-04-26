@@ -13,11 +13,13 @@ declare namespace APP {
   export type MessageType = 'text' | 'image'
 
   export type Message = {
+    id?: number,
     content: string,
     type: MessageType,
     is_server: boolean,
     req_id: number,
-    avatar : string
+    avatar : string,
+    received_at: number
   }
 
   export type WebsocketContext = {

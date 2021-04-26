@@ -12,7 +12,7 @@ const Index: React.FC<{
       }).then()
   }, [])
 
-  return  <View className='message-content image'>
+  return  <View className='content image'>
       <Image className='image' mode='aspectFit' src={props.content} onClick={() => preview(props.content)} />
     </View>
 }

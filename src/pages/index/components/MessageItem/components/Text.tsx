@@ -4,7 +4,7 @@ import { View } from "@tarojs/components";
 const Index: React.FC<{
   content: string
 }> = props => {
-  return  <View className='message-content text'>
+  return  <View className='content text'>
     {props.content}
   </View>
 }

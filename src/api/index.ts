@@ -7,8 +7,11 @@ export const handleLogin = (data) => {
     data
   })
 }
-export const getMessages = () => {
+export const getMessages = (id?: number) => {
   return request<APP.Message[]>({
-    url: '/ws/messages'
+    url: '/ws/messages',
+    data: {
+      id
+    }
   })
 }

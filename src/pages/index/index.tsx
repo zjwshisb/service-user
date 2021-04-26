@@ -1,21 +1,28 @@
 import React from 'react'
+import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 
-
+import {getMessages} from "@/api";
+import {getToken} from "@/util/auth";
 import './index.less'
-import MessageItem from "./components/MessageItem/index"
-import {getMessages} from "../../api";
-import {getToken} from "../../util/auth";
+
 import SendContext from './context'
 import Input from './components/Input'
+import MessageContent from './components/MessageContent/index'
 
 
 const Index = () => {
 
-
   const [websocket, setWebsocket] = React.useState<WebSocket | undefined>()
 
   const [messages, setMessages] = React.useState<APP.Message[]>([])
+
+  const [loading, setLoading] = React.useState(false)
+
+  const [initFinished, setInitFinished] = React.useState(false)
+
+  const [noMore, setNoMore] = React.useState(false)
+
 
 
   const connect = React.useCallback(() => {
@@ -50,45 +57,52 @@ const Index = () => {
 
   React.useEffect(() => {
     getMessages().then(res => {
-      setMessages(res.data)
+      const ms = res.data.reverse()
+      setMessages(ms)
       connect()
+      setInitFinished(true)
     })
   }, [connect])
 
 
   const send = React.useCallback((act: APP.Action) => {
     if (websocket) {
+      websocket.send(JSON.stringify(act))
       setMessages(prev => {
         const newState = prev.slice(0)
         newState.push(act.data)
         return newState
       })
-      websocket.send(JSON.stringify(act))
     }
   }, [websocket])
 
 
-  const ref = React.useRef<HTMLElement>(null)
-
-
-  React.useLayoutEffect(() => {
-    if (ref.current != null) {
-      const {scrollHeight, clientHeight} = ref.current
-      const maxScrollTop = scrollHeight - clientHeight
-      ref.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+  const getMoreMessage = React.useCallback(() => {
+    if (!loading && initFinished && !noMore) {
+      setLoading(true)
+      if (messages.length > 0) {
+        const id = messages[0].id
+        if (id) {
+          getMessages(id).then(res => {
+            if (res.data.length <= 0){
+              setNoMore(true)
+            } else {
+              setMessages(prevState => {
+                setLoading(false)
+                return res.data.reverse().concat(prevState)
+              })
+            }
+          })
+        }
+      }
     }
-  })
+
+  }, [initFinished, loading, messages, noMore])
 
   return (
     <SendContext.Provider value={send}>
       <View className='index'>
-        <View className='message-content' ref={ref}>
-          {
-            messages.map(v => {
-              return <MessageItem message={v} key={v.req_id} />
-            })
-          }
-        </View>
+        <MessageContent  messages={messages} onScrollToUpper={getMoreMessage} />
         <Input />
     </View>
     </SendContext.Provider>
