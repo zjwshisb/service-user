@@ -1,6 +1,5 @@
 import React from 'react'
-import {ScrollView, View} from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import {ScrollView} from '@tarojs/components'
 
 import MessageItem from "../MessageItem/index"
 
@@ -9,64 +8,51 @@ const Index: React.FC<{
   onScrollToUpper: () => void,
 }> = (props) => {
 
-  const [scrollTop, setScrollTop] = React.useState(0)
+  const onScrollToUpper = React.useCallback(async () => {
+    await props.onScrollToUpper()
+  }, [props])
 
-  const ref = React.useRef(0)
+  const [top, setTop] = React.useState(0)
 
-  const lastMessage = React.useRef<APP.Message>()
+  const view = React.useRef(undefined)
 
-  const getScrollHeight = React.useCallback(() => {
-    const select = Taro.createSelectorQuery()
-    let a = 0
-    let scrollViewHeight = 0
-    // select.select('#inner-content').boundingClientRect()
-    // select.exec(res => {
-    //   a = res.height
-    // })
-    select.select('#message-content').boundingClientRect()
-    select.selectViewport().scrollOffset()
-    select.exec(v => {
-      console.log(v)
-    })
-    return a - scrollViewHeight
+  const scrollBottom = React.useRef(0)
+
+  const onScroll = React.useCallback((e) => {
+    scrollBottom.current = e.detail.scrollHeight - e.detail.scrollTop
   }, [])
 
-
-  const onScrollToUpper = React.useCallback(() => {
-    if (props.messages.length > 0) {
-      ref.current = getScrollHeight()
-      props.onScrollToUpper()
-    }
-  }, [getScrollHeight, props])
-
-
   React.useLayoutEffect(() => {
-    const length = props.messages.length
-    if (length > 0) {
-      const newLast = props.messages[length - 1]
-      if (lastMessage.current) {
-        // 接受到新消息或者发送消息,滚动到底部
-        if (lastMessage.current.req_id !== newLast.req_id) {
-          setScrollTop(getScrollHeight())
+    if (view.current) {
+      setTop(prevState => {
+        if (view.current !== undefined) {
+          // @ts-ignore
+          console.log(view.current.scrollHeight)
+          // @ts-ignore
+          const t = view.current.scrollHeight - scrollBottom.current
+          console.log(t)
+          if (t === prevState) {
+            return t + 1
+          }
+          return t
         }
-      }
-      lastMessage.current = props.messages[length - 1]
+        return prevState
+      })
     }
-    setScrollTop(getScrollHeight())
-  }, [getScrollHeight, props.messages])
+  }, [props.messages])
 
 
   return (
-    <ScrollView scrollTop={scrollTop} scrollY id='message-content' className='message-content'
+    <ScrollView ref={view} scrollTop={top}  scrollY className='message-content'
+      onScroll={onScroll}
+      upperThreshold={30}
       onScrollToUpper={onScrollToUpper}
     >
-      <View id='inner-content' className='inner-content'>
-        {
-          props.messages.map(v => {
-            return <MessageItem message={v} key={v.req_id} />
-          })
-        }
-      </View>
+      {
+        props.messages.map(v => {
+          return <MessageItem message={v} key={v.req_id} />
+        })
+      }
     </ScrollView>
   )
 }

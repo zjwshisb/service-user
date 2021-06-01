@@ -102,7 +102,7 @@ const Index = () => {
   return (
     <SendContext.Provider value={send}>
       <View className='index'>
-        <MessageContent  messages={messages} onScrollToUpper={getMoreMessage} />
+        <MessageContent   messages={messages} onScrollToUpper={getMoreMessage} />
         <Input />
     </View>
     </SendContext.Provider>
