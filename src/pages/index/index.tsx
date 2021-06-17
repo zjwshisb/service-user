@@ -24,7 +24,6 @@ const Index = () => {
   const [noMore, setNoMore] = React.useState(false)
 
 
-
   const connect = React.useCallback(() => {
     const ws = new WebSocket(`${WS_URL}?token=` + getToken())
     ws.onopen = e => {
@@ -37,9 +36,7 @@ const Index = () => {
           case 'receive-message': {
             const msg = action.data as APP.Message
             setMessages(prev => {
-              const newState = prev.slice(0)
-              newState.push(msg)
-              return newState
+              return [msg].concat(prev)
             })
           }
         }
@@ -57,8 +54,7 @@ const Index = () => {
 
   React.useEffect(() => {
     getMessages().then(res => {
-      const ms = res.data.reverse()
-      setMessages(ms)
+      setMessages(res.data)
       connect()
       setInitFinished(true)
     })
@@ -69,9 +65,7 @@ const Index = () => {
     if (websocket) {
       websocket.send(JSON.stringify(act))
       setMessages(prev => {
-        const newState = prev.slice(0)
-        newState.push(act.data)
-        return newState
+        return [act.data].concat(prev)
       })
     }
   }, [websocket])
@@ -81,7 +75,7 @@ const Index = () => {
     if (!loading && initFinished && !noMore) {
       setLoading(true)
       if (messages.length > 0) {
-        const id = messages[0].id
+        const id = messages[messages.length - 1].id
         if (id) {
           getMessages(id).then(res => {
             if (res.data.length <= 0){
@@ -89,7 +83,7 @@ const Index = () => {
             } else {
               setMessages(prevState => {
                 setLoading(false)
-                return res.data.reverse().concat(prevState)
+                return [...prevState.concat(res.data)]
               })
             }
           })
@@ -102,7 +96,7 @@ const Index = () => {
   return (
     <SendContext.Provider value={send}>
       <View className='index'>
-        <MessageContent   messages={messages} onScrollToUpper={getMoreMessage} />
+        <MessageContent  messages={messages} onScrollToUpper={getMoreMessage} />
         <Input />
     </View>
     </SendContext.Provider>

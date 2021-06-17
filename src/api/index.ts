@@ -7,6 +7,12 @@ export const handleLogin = (data) => {
     data
   })
 }
+export const getTemplateId = () => {
+  return request<{id: string}>({
+    url: '/template-id',
+    method: 'GET'
+  })
+}
 export const getMessages = (id?: number) => {
   return request<APP.Message[]>({
     url: '/ws/messages',
