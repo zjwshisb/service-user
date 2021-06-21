@@ -13,8 +13,6 @@ import MessageContent from './components/MessageContent/index'
 
 const Index = () => {
 
-  const [websocket, setWebsocket] = React.useState<WebSocket | undefined>()
-
   const [messages, setMessages] = React.useState<APP.Message[]>([])
 
   const [loading, setLoading] = React.useState(false)
@@ -25,13 +23,15 @@ const Index = () => {
 
 
   const connect = React.useCallback(() => {
-    const ws = new WebSocket(`${WS_URL}?token=` + getToken())
-    ws.onopen = e => {
+    Taro.connectSocket({
+      url: `${WS_URL}?token=` + getToken()
+    })
+    Taro.onSocketOpen(e => {
       console.log(e)
-    }
-    ws.onmessage = e => {
-      if (e.data != '') {
-        const action: APP.Action = JSON.parse(e.data)
+    })
+    Taro.onSocketMessage(result => {
+      if (result.data != '') {
+        const action: APP.Action = JSON.parse(result.data)
         switch (action.action) {
           case 'receive-message': {
             const msg = action.data as APP.Message
@@ -41,14 +41,7 @@ const Index = () => {
           }
         }
       }
-    }
-    ws.onclose = e => {
-      console.log(e)
-    }
-    ws.onerror = e => {
-      console.log(e)
-    }
-    setWebsocket(ws)
+    })
   }, [])
 
 
@@ -62,31 +55,30 @@ const Index = () => {
 
 
   const send = React.useCallback((act: APP.Action) => {
-    if (websocket) {
-      websocket.send(JSON.stringify(act))
-      setMessages(prev => {
-        return [act.data].concat(prev)
-      })
-    }
-  }, [websocket])
+    Taro.sendSocketMessage({
+      data: JSON.stringify(act)
+    }).then().catch()
+    setMessages(prev => {
+      return [act.data].concat(prev)
+    })
+  }, [])
 
 
-  const getMoreMessage = React.useCallback(() => {
+  const getMoreMessage = React.useCallback(async () => {
     if (!loading && initFinished && !noMore) {
       setLoading(true)
       if (messages.length > 0) {
         const id = messages[messages.length - 1].id
         if (id) {
-          getMessages(id).then(res => {
-            if (res.data.length <= 0){
-              setNoMore(true)
-            } else {
-              setMessages(prevState => {
-                setLoading(false)
-                return [...prevState.concat(res.data)]
-              })
-            }
-          })
+          const res = await getMessages(id)
+          if (res.data.length <= 0){
+            setNoMore(true)
+          } else {
+            setMessages(prevState => {
+              setLoading(false)
+              return [...prevState.concat(res.data)]
+            })
+          }
         }
       }
     }
@@ -96,7 +88,16 @@ const Index = () => {
   return (
     <SendContext.Provider value={send}>
       <View className='index'>
-        <MessageContent  messages={messages} onScrollToUpper={getMoreMessage} />
+        <MessageContent  messages={messages} >
+          {
+            noMore ?   <view className='load-more'>
+              没有更多了
+            </view> : <view className='load-more' onClick={getMoreMessage}>
+              加载更多
+            </view>
+          }
+
+        </MessageContent>
         <Input />
     </View>
     </SendContext.Provider>
