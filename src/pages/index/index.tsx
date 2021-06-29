@@ -21,27 +21,29 @@ const Index = () => {
 
   const [noMore, setNoMore] = React.useState(false)
 
+  const [task, setTask] = React.useState<Taro.SocketTask | undefined>()
+
 
   const connect = React.useCallback(() => {
     Taro.connectSocket({
       url: `${WS_URL}?token=` + getToken()
-    })
-    Taro.onSocketOpen(e => {
-      console.log(e)
-    })
-    Taro.onSocketMessage(result => {
-      if (result.data != '') {
-        const action: APP.Action = JSON.parse(result.data)
-        switch (action.action) {
-          case 'receive-message': {
-            const msg = action.data as APP.Message
-            setMessages(prev => {
-              return [msg].concat(prev)
-            })
+    }).then(t => {
+      t.onMessage(result => {
+        if (result.data != '') {
+          const action: APP.Action = JSON.parse(result.data)
+          switch (action.action) {
+            case 'receive-message': {
+              const msg = action.data as APP.Message
+              setMessages(prev => {
+                return [msg].concat(prev)
+              })
+            }
           }
         }
-      }
+      })
+      setTask(t)
     })
+
   }, [])
 
 
@@ -55,13 +57,15 @@ const Index = () => {
 
 
   const send = React.useCallback((act: APP.Action) => {
-    Taro.sendSocketMessage({
-      data: JSON.stringify(act)
-    }).then().catch()
-    setMessages(prev => {
-      return [act.data].concat(prev)
-    })
-  }, [])
+    if (task) {
+      task?.send({
+        data: JSON.stringify(act)
+      })
+      setMessages(prev => {
+        return [act.data].concat(prev)
+      })
+    }
+  }, [task])
 
 
   const getMoreMessage = React.useCallback(async () => {
@@ -90,11 +94,11 @@ const Index = () => {
       <View className='index'>
         <MessageContent  messages={messages} >
           {
-            noMore ?   <view className='load-more'>
+            noMore ?   <View className='load-more'>
               没有更多了
-            </view> : <view className='load-more' onClick={getMoreMessage}>
-              加载更多
-            </view>
+            </View> : <View className='load-more' onClick={getMoreMessage}>
+              点击加载更多
+            </View>
           }
 
         </MessageContent>

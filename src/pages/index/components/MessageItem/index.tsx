@@ -7,9 +7,9 @@ import Avatar from '../../../../components/UserAvatar/Index'
 const Index: React.FC<{
   message: APP.Message
 }> = props => {
-  return <View className={`message-item ${props.message.is_server ? 'left' : 'right'}`}>
+  return <View className={`message-item ${props.message.source === 0 ? 'right' : 'left'}`}>
     {
-      props.message.is_server ? <Image src={props.message.avatar} className='message-avatar' />
+      props.message.source !== 0  ? <Image src={props.message.avatar} className='message-avatar' />
       : <Avatar />
     }
     {

@@ -8,7 +8,7 @@ export function newAction(content, type: APP.MessageType = "text") : APP.Action<
       content,
       type,
       req_id:createReqId(),
-      is_server: false,
+      source: 0,
       avatar: '',
       received_at: time
     },
