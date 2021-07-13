@@ -10,21 +10,22 @@ declare namespace APP {
     time: number,
     action: string,
   }
-  export type MessageType = 'text' | 'image'
 
-  export type Message = {
-    id?: number,
+  export type MessageType = 'text' | 'image' | 'navigator'
+
+  export type NavigatorContent = {
     content: string,
+    title: string,
+    url: string
+  }
+
+  export type Message<T = string> = {
+    id?: number,
+    content: T,
     type: MessageType,
     source: number,
     req_id: number,
     avatar : string,
     received_at: number
-  }
-
-  export type WebsocketContext = {
-    messages: APP.Message[],
-    websocket?: WebSocket,
-    send?: (a: APP.Action) => void
   }
 }

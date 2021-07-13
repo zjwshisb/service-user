@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Image} from '@tarojs/components'
 import Text from './components/Text'
 import ImageMsg from './components/Image'
+import Navigator from './components/Navigator'
 import Avatar from '../../../../components/UserAvatar/Index'
 
 const Index: React.FC<{
@@ -17,6 +18,9 @@ const Index: React.FC<{
     }
     {
       props.message.type === 'image' && <ImageMsg content={props.message.content} />
+    }
+    {
+      props.message.type === "navigator" && <Navigator content={props.message.content} />
     }
   </View>
 }
