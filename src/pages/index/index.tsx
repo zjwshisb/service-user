@@ -23,11 +23,23 @@ const Index = () => {
 
   const [task, setTask] = React.useState<Taro.SocketTask | undefined>()
 
+  const [toTop, setToTop] = React.useState(false)
 
   const connect = React.useCallback(() => {
     Taro.connectSocket({
       url: `${WS_URL}?token=` + getToken()
     }).then(t => {
+      t.onError(() => {
+        Taro.showToast({
+          title: '连接服务器失败',
+          icon: 'none'
+        })
+      })
+      t.onOpen(() => {
+        Taro.showToast({
+          title: '聊天服务器成功'
+        })
+      })
       t.onMessage(result => {
         if (result.data != '') {
           const action: APP.Action = JSON.parse(result.data)
@@ -37,24 +49,25 @@ const Index = () => {
               setMessages(prev => {
                 return [msg].concat(prev)
               })
+              setToTop(prevState => !prevState)
             }
           }
         }
+      })
+      t.onClose(() => {
+        setTask(undefined)
       })
       setTask(t)
     })
 
   }, [])
 
-
   React.useEffect(() => {
-    getMessages().then(res => {
-      setMessages(res.data)
-      connect()
-      setInitFinished(true)
+    setTask(prevState => {
+      prevState?.close({})
+      return undefined
     })
-  }, [connect])
-
+  }, [])
 
   const send = React.useCallback((act: APP.Action) => {
     if (task) {
@@ -64,8 +77,31 @@ const Index = () => {
       setMessages(prev => {
         return [act.data].concat(prev)
       })
+      setToTop(prevState => !prevState)
+    } else {
+      Taro.showModal({
+        title: '提示',
+        content: '聊天服务器已断开',
+        confirmText: '重新连接'
+      }).then(res => {
+        if (res.confirm) {
+          connect()
+        }
+      })
     }
-  }, [task])
+  }, [connect, task])
+
+
+  React.useEffect(() => {
+    getMessages().then(res => {
+      if (res.data.length < 100) {
+        setNoMore(true)
+      }
+      setMessages(res.data)
+      connect()
+      setInitFinished(true)
+    })
+  } ,[connect])
 
 
   const getMoreMessage = React.useCallback(async () => {
@@ -75,7 +111,7 @@ const Index = () => {
         const id = messages[messages.length - 1].id
         if (id) {
           const res = await getMessages(id)
-          if (res.data.length <= 0){
+          if (res.data.length < 100) {
             setNoMore(true)
           } else {
             setMessages(prevState => {
@@ -92,18 +128,22 @@ const Index = () => {
   return (
     <SendContext.Provider value={send}>
       <View className='index'>
-        <MessageContent  messages={messages} >
-          {
-            noMore ?   <View className='load-more'>
-              没有更多了
-            </View> : <View className='load-more' onClick={getMoreMessage}>
-              点击加载更多
-            </View>
-          }
-
-        </MessageContent>
+        <View className='message-content'>
+          <MessageContent messages={messages} top={toTop}>
+            {
+              noMore && messages.length > 0 ?
+                <View className='load-more'>
+                  没有更多了
+                </View>
+                :
+                <View className='load-more' onClick={getMoreMessage}>
+                  点击加载更多
+                </View>
+            }
+          </MessageContent>
+        </View>
         <Input />
-    </View>
+      </View>
     </SendContext.Provider>
   )
 }

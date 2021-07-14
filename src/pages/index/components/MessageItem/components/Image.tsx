@@ -13,7 +13,13 @@ const Index: React.FC<{
   }, [])
 
   return  <View className='content image'>
-      <Image className='image' mode='aspectFit' src={props.content} onClick={() => preview(props.content)} />
+      <Image lazyLoad
+        className='image'
+        showMenuByLongpress
+        src={props.content}
+        mode='widthFix'
+        onClick={() => preview(props.content)}
+      />
     </View>
 }
 export default Index

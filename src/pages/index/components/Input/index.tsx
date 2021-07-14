@@ -4,11 +4,11 @@ import Taro from '@tarojs/taro'
 import {newAction} from "@/util/action";
 import {getToken} from "@/util/auth"
 import { getTemplateId } from "@/api";
-
-
-import Face from '@/asset/img/face.svg'
-import More from '@/asset/img/more.svg'
+import PictureImg from '@/asset/img/picture.png'
+import styles from './index.module.less'
 import context from "../../context";
+
+
 
 
 const Index = () => {
@@ -17,7 +17,9 @@ const Index = () => {
 
   const [templateId, setTemplateId] = React.useState('')
 
-  const [subscribe, setSubscribe] = React.useState<boolean | undefined>()
+  const [subscribe, setSubscribe] = React.useState<boolean>()
+
+  const [isIphonex, setIphonex] = React.useState(false)
 
 
   React.useEffect(() => {
@@ -26,6 +28,10 @@ const Index = () => {
         setTemplateId(res.data.id)
       })
     }
+    setIphonex(() => {
+      const model = Taro.getSystemInfoSync().model
+      return /iphone\sx/i.test(model) || (/iphone/i.test(model) && /unknown/.test(model)) || /iphone\s11/i.test(model);
+    })
   }, [])
 
   const send = React.useContext(context)
@@ -36,9 +42,13 @@ const Index = () => {
         Taro.requestSubscribeMessage({
           tmplIds: [templateId]
         }).then(r => {
+          setSubscribe(true)
+          console.log(r)
           if (r[templateId] === 'accept') {
-
           }
+        }).catch(err => {
+          setSubscribe(true)
+          console.log(err)
         })
       }
     })
@@ -67,23 +77,24 @@ const Index = () => {
     })
   }, [send])
 
-
   return (
-    <View className='input-area'>
-      <View className='input'>
-        <Input value={value} onInput={e => setValue(e.detail.value)} onConfirm={e => {
-          if (send) {
+    <View className={`${styles.inputArea} ${isIphonex? styles.iphonex : ''}`}>
+      <View className={styles.input}>
+        <Input cursorSpacing={20} onClick={() => {
+          if (templateId !== '' && !subscribe) {
+            subscribeMessage()
+          }
+        }} value={value} onInput={e => setValue(e.detail.value)} confirmHold onConfirm={e => {
+          if (send && e.detail.value.length > 0) {
             send(newAction(e.detail.value))
             setValue('')
-            if (templateId !== '') {
-            }
+
           }
         }}
         />
       </View>
-      <View className='action'>
-        <Image src={Face} className='icon' />
-        <Image src={More} className='icon' onClick={selectImg} />
+      <View className={styles.action}>
+        <Image src={PictureImg} className={styles.icon} mode='widthFix' onClick={selectImg} />
       </View>
     </View>
   )

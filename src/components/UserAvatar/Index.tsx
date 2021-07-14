@@ -1,9 +1,22 @@
 import React from 'react'
-
-import {Image} from "@tarojs/components";
+import Taro from "@tarojs/taro";
+import {Image, OpenData, View} from "@tarojs/components";
 import DefaultAvatar from '../../asset/img/default.png'
 
+const env = Taro.getEnv()
+
 const Index = () => {
-  return <Image src={DefaultAvatar} className='message-avatar' />
+  let avatar = <Image src={DefaultAvatar} className='message-avatar'  />
+
+  switch (env) {
+    case Taro.ENV_TYPE.WEAPP:
+      avatar = <View className='message-avatar'>
+        <OpenData type='userAvatarUrl' />
+      </View>
+    default: {
+
+    }
+  }
+  return avatar
 }
 export default Index

@@ -5,9 +5,23 @@ import MessageItem from "../MessageItem/index"
 
 const Index: React.FC<{
   messages: APP.Message[],
+  top?: boolean
 }> = (props) => {
+
+  const [top, setTop] = React.useState(0)
+
+  React.useEffect(() => {
+    setTop(prevState => {
+      if (prevState > 0) {
+        return 0
+      } else {
+        return 1
+      }
+    })
+  } , [props.top])
+
   return (
-    <ScrollView scrollY className='message-content'
+    <ScrollView scrollY className='scroll-view' scrollTop={top}
       enableFlex
     >
       {

@@ -10,7 +10,8 @@ const Index: React.FC<{
 }> = props => {
   return <View className={`message-item ${props.message.source === 0 ? 'right' : 'left'}`}>
     {
-      props.message.source !== 0  ? <Image src={props.message.avatar} className='message-avatar' />
+      props.message.source !== 0  ?
+        <Image src={props.message.avatar} className='message-avatar' />
       : <Avatar />
     }
     {

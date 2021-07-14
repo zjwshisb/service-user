@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "wsmobile",
   "description": "",
-  "appid": "wx2f4a587f12272f9a",
+  "appid": "wx7785fe3ead5dc3c8",
   "setting": {
     "urlCheck": false,
     "es6": false,
@@ -21,9 +21,9 @@
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
-    "useMultiFrameRuntime": false,
-    "useApiHook": false,
-    "useApiHostProcess": false,
+    "useMultiFrameRuntime": true,
+    "useApiHook": true,
+    "useApiHostProcess": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
