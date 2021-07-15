@@ -17,7 +17,6 @@ const Index = () => {
 
   const [loading, setLoading] = React.useState(false)
 
-  const [initFinished, setInitFinished] = React.useState(false)
 
   const [noMore, setNoMore] = React.useState(false)
 
@@ -69,6 +68,17 @@ const Index = () => {
     })
   }, [])
 
+  const init = React.useCallback(() => {
+    setNoMore(false)
+    getMessages().then(res => {
+      if (res.data.length < 100) {
+        setNoMore(true)
+      }
+      setMessages(res.data)
+      connect()
+    })
+  } ,[connect])
+
   const send = React.useCallback((act: APP.Action) => {
     if (task) {
       task?.send({
@@ -92,20 +102,14 @@ const Index = () => {
   }, [connect, task])
 
 
+
   React.useEffect(() => {
-    getMessages().then(res => {
-      if (res.data.length < 100) {
-        setNoMore(true)
-      }
-      setMessages(res.data)
-      connect()
-      setInitFinished(true)
-    })
-  } ,[connect])
+    init()
+  } ,[connect, init])
 
 
   const getMoreMessage = React.useCallback(async () => {
-    if (!loading && initFinished && !noMore) {
+    if (!loading  && !noMore) {
       setLoading(true)
       if (messages.length > 0) {
         const id = messages[messages.length - 1].id
@@ -123,7 +127,7 @@ const Index = () => {
       }
     }
 
-  }, [initFinished, loading, messages, noMore])
+  }, [ loading, messages, noMore])
 
   return (
     <SendContext.Provider value={send}>
