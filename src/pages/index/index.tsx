@@ -60,13 +60,6 @@ const Index = () => {
 
   }, [])
 
-  React.useEffect(() => {
-    setTask(prevState => {
-      prevState?.close({})
-      return undefined
-    })
-  }, [])
-
   const init = React.useCallback(() => {
     setNoMore(false)
     getMessages().then(res => {
@@ -106,7 +99,13 @@ const Index = () => {
 
   React.useEffect(() => {
     init()
-  } ,[connect, init])
+    return () => {
+      setTask(prevState => {
+        prevState?.close({})
+        return undefined
+      })
+    }
+  } ,[init])
 
 
   const getMoreMessage = React.useCallback(async () => {
