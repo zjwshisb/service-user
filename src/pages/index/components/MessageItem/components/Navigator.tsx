@@ -8,11 +8,19 @@ const Index: React.FC<{
 
   const item: APP.NavigatorContent = JSON.parse(props.content)
 
+  const goto = React.useCallback((url) => {
+    Taro.navigateTo({
+      url
+    }).catch(() => {
+      Taro.showToast({
+        icon: 'none',
+        title: '路径不存在'
+      })
+    })
+  } , [])
+
   return  <View className='content navigator'>
-      <View className='card' onClick={() => Taro.navigateTo({
-        url: item.url
-      })}
-      >
+      <View className='card' onClick={() => goto(item.url)}>
         <Image className='image' src={item.content}  />
         <View className='title'>{item.title}</View>
       </View>

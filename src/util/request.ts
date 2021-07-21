@@ -12,6 +12,7 @@ function request<T = any>(options: Taro.request.Option) : Promise<APP.Resp<T>> {
   }
   options.url = BASE_URL + options.url
   return Taro.request(options).then(res => {
+    // 小程序请求有响应都进入这里
     switch (res.statusCode) {
       case 200: {
         return Promise.resolve(res.data)
@@ -48,6 +49,7 @@ function request<T = any>(options: Taro.request.Option) : Promise<APP.Resp<T>> {
         return Promise.reject(res)
     }
   }).catch(res => {
+    // h5非200会进入这里
     switch (res.status) {
       case 401: {
         removeToken()

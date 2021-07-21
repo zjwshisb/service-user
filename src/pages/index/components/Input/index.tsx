@@ -8,9 +8,6 @@ import PictureImg from '@/asset/img/picture.png'
 import styles from './index.module.less'
 import context from "../../context";
 
-
-
-
 const Index = () => {
 
   const [value, setValue] = React.useState('')
@@ -86,9 +83,9 @@ const Index = () => {
           }
         }} value={value} onInput={e => setValue(e.detail.value)} confirmHold onConfirm={e => {
           if (send && e.detail.value.length > 0) {
-            send(newAction(e.detail.value))
-            setValue('')
-
+            if (send(newAction(e.detail.value))) {
+              setValue('')
+            }
           }
         }}
         />

@@ -4,8 +4,10 @@ import { View } from "@tarojs/components";
 const Index: React.FC<{
   content: string
 }> = props => {
-  return  <View className='content text'>
-    {props.content}
-  </View>
+  return React.useMemo(() => {
+    return  <View className='content text'>
+      {props.content}
+    </View>
+  } ,[props.content])
 }
 export default Index

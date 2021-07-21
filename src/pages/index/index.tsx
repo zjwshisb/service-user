@@ -1,7 +1,6 @@
 import React from 'react'
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
-
 import {getMessages} from "@/api";
 import {getToken} from "@/util/auth";
 import './index.less'
@@ -36,7 +35,7 @@ const Index = () => {
       })
       t.onOpen(() => {
         Taro.showToast({
-          title: '聊天服务器成功'
+          title: '连接服务器成功'
         })
       })
       t.onMessage(result => {
@@ -79,15 +78,16 @@ const Index = () => {
     })
   } ,[connect])
 
-  const send = React.useCallback((act: APP.Action) => {
+  const send = React.useCallback((act: APP.Action) : boolean => {
     if (task) {
-      task?.send({
+      task.send({
         data: JSON.stringify(act)
       })
       setMessages(prev => {
         return [act.data].concat(prev)
       })
       setToTop(prevState => !prevState)
+      return true
     } else {
       Taro.showModal({
         title: '提示',
@@ -98,6 +98,7 @@ const Index = () => {
           connect()
         }
       })
+      return false
     }
   }, [connect, task])
 
@@ -115,13 +116,12 @@ const Index = () => {
         const id = messages[messages.length - 1].id
         if (id) {
           const res = await getMessages(id)
+          setMessages(prevState => {
+            setLoading(false)
+            return [...prevState.concat(res.data)]
+          })
           if (res.data.length < 100) {
             setNoMore(true)
-          } else {
-            setMessages(prevState => {
-              setLoading(false)
-              return [...prevState.concat(res.data)]
-            })
           }
         }
       }

@@ -5,7 +5,7 @@ import MessageItem from "../MessageItem/index"
 
 const Index: React.FC<{
   messages: APP.Message[],
-  top?: boolean
+  top: boolean,
 }> = (props) => {
 
   const [top, setTop] = React.useState(0)
@@ -18,10 +18,16 @@ const Index: React.FC<{
         return 1
       }
     })
-  } , [props.top])
+  }, [props.top])
+
+
 
   return (
     <ScrollView scrollY className='scroll-view' scrollTop={top}
+      lowerThreshold={300}
+      onScrollToLower={() => {
+                  console.log('lower')
+                }}
       enableFlex
     >
       {
