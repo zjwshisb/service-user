@@ -38,5 +38,6 @@
     "showES6CompileOption": false
   },
   "compileType": "miniprogram",
+  "libVersion": "2.18.1",
   "condition": {}
 }

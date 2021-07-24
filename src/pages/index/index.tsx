@@ -134,12 +134,12 @@ const Index = () => {
         <View className='message-content'>
           <MessageContent messages={messages} top={toTop}>
             {
-              noMore && messages.length > 0 ?
-                <View className='load-more'>
-                  没有更多了
-                </View>
-                :
-                <View className='load-more' onClick={getMoreMessage}>
+              (noMore && messages.length > 0) && <View className='load-more'>
+                没有更多了
+              </View>
+            }
+            {
+              (!noMore && messages.length > 50) && <View className='load-more' onClick={getMoreMessage}>
                   点击加载更多
                 </View>
             }

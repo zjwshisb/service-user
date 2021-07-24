@@ -21,3 +21,9 @@ export const getMessages = (id?: number) => {
     }
   })
 }
+export const handleSubscribe = () => {
+  return request({
+    url: '/subscribe',
+    method: 'POST'
+  })
+}

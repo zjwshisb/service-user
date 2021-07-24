@@ -11,6 +11,10 @@ declare namespace APP {
     action: string,
   }
 
+  export type ImageResp = {
+    url: string
+  }
+
   export type MessageType = 'text' | 'image' | 'navigator'
 
   export type NavigatorContent = {
