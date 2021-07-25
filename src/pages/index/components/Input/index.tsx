@@ -3,7 +3,7 @@ import {View, Input, Image} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import {newAction} from "@/util/action";
 import {getToken} from "@/util/auth"
-import { getTemplateId, handleSubscribe } from "@/api";
+import {getTemplateId, handleSubscribe} from "@/api";
 import PictureImg from '@/asset/img/picture.png'
 import styles from './index.module.less'
 import context from "../../context";
@@ -50,8 +50,7 @@ const Index = () => {
   }, [hadSubscribe, templateId])
 
   const selectImg = React.useCallback(() => {
-    Taro.chooseImage({
-    }).then(res => {
+    Taro.chooseImage({}).then(res => {
       res.tempFilePaths.forEach(path => {
         Taro.uploadFile({
           header: {
@@ -62,7 +61,7 @@ const Index = () => {
           filePath: path
         }).then(r => {
           if (send) {
-            const result : APP.Resp<APP.ImageResp> = JSON.parse(r.data)
+            const result: APP.Resp<APP.ImageResp> = JSON.parse(r.data)
             if (result.success) {
               send(newAction(result.data.url, 'image'))
             }
@@ -73,15 +72,20 @@ const Index = () => {
   }, [send])
 
   return (
-    <View className={`${styles.inputArea} ${isIphonex? styles.iphonex : ''}`}>
+    <View className={`${styles.inputArea} ${isIphonex ? styles.iphonex : ''}`}>
       <View className={styles.input}>
-        <Input cursorSpacing={20} onClick={subscribeMessage} value={value} onInput={e => setValue(e.detail.value)} confirmHold onConfirm={e => {
-          if (send && e.detail.value.length > 0) {
-            if (send(newAction(e.detail.value))) {
-              setValue('')
-            }
-          }
-        }}
+        <Input cursorSpacing={20}
+          onClick={subscribeMessage}
+          value={value}
+          onInput={e => setValue(e.detail.value)}
+          confirmHold
+          onConfirm={e => {
+                 if (send && e.detail.value.length > 0) {
+                   if (send(newAction(e.detail.value))) {
+                     setValue('')
+                   }
+                 }
+               }}
         />
       </View>
       <View className={styles.action}>
