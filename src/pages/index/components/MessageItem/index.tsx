@@ -4,14 +4,15 @@ import Text from './components/Text'
 import ImageMsg from './components/Image'
 import Navigator from './components/Navigator'
 import Avatar from '../../../../components/UserAvatar/Index'
+import styles from './index.module.less'
 
 const Index: React.FC<{
   message: APP.Message
 }> = props => {
-  return <View className={`message-item ${props.message.source === 0 ? 'right' : 'left'}`}>
+  return <View className={`${styles.messageItem} ${props.message.source === 0 ? styles.right : ''}`}>
     {
       props.message.source !== 0  ?
-        <Image src={props.message.avatar} className='message-avatar' />
+        <Image src={props.message.avatar} className={styles.messageAvatar} />
       : <Avatar />
     }
     {

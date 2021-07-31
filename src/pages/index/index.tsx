@@ -3,12 +3,13 @@ import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {getMessages} from "@/api";
 import {getToken} from "@/util/auth";
-import './index.less'
+import styles from './index.module.less'
 
 import SendContext from './context'
 import Input from './components/Input'
 import MessageContent from './components/MessageContent/index'
 
+const pageSize = 100
 
 const Index = () => {
 
@@ -62,7 +63,7 @@ const Index = () => {
 
   const init = React.useCallback(() => {
     setNoMore(false)
-    getMessages().then(res => {
+    getMessages(undefined, pageSize).then(res => {
       if (res.data.length < 100) {
         setNoMore(true)
       }
@@ -70,6 +71,7 @@ const Index = () => {
       connect()
     })
   } ,[connect])
+
 
   const send = React.useCallback((act: APP.Action) : boolean => {
     if (task) {
@@ -114,7 +116,7 @@ const Index = () => {
       if (messages.length > 0) {
         const id = messages[messages.length - 1].id
         if (id) {
-          const res = await getMessages(id)
+          const res = await getMessages(id, pageSize)
           setMessages(prevState => {
             setLoading(false)
             return [...prevState.concat(res.data)]
@@ -130,16 +132,16 @@ const Index = () => {
 
   return (
     <SendContext.Provider value={send}>
-      <View className='index'>
-        <View className='message-content'>
+      <View className={styles.index}>
+        <View className={styles.messageContent}>
           <MessageContent messages={messages} top={toTop}>
             {
-              (noMore && messages.length > 0) && <View className='load-more'>
+              noMore && messages.length > 50 && <View className={styles.loadMore}>
                 没有更多了
               </View>
             }
             {
-              (!noMore && messages.length > 50) && <View className='load-more' onClick={getMoreMessage}>
+              (!noMore && messages.length >= pageSize) && <View className={styles.loadMore} onClick={getMoreMessage}>
                   点击加载更多
                 </View>
             }

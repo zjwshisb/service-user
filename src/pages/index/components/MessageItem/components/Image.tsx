@@ -1,6 +1,7 @@
 import React from 'react'
 import { View,Image } from "@tarojs/components";
 import Taro from '@tarojs/taro'
+import styles from '../index.module.less'
 
 const Index: React.FC<{
   content: string
@@ -12,9 +13,9 @@ const Index: React.FC<{
       }).then()
   }, [])
 
-  return  <View className='content image'>
+  return  <View className={`${styles.content} ${styles.image}`}>
       <Image lazyLoad
-        className='image'
+        className={styles.image}
         showMenuByLongpress
         src={props.content}
         mode='widthFix'

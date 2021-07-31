@@ -1,6 +1,6 @@
 import React from 'react'
 import {ScrollView} from '@tarojs/components'
-
+import styles from './index.module.less'
 import MessageItem from "../MessageItem/index"
 
 const Index: React.FC<{
@@ -21,9 +21,8 @@ const Index: React.FC<{
   }, [props.top])
 
 
-
   return (
-    <ScrollView scrollY className='scroll-view' scrollTop={top}
+    <ScrollView scrollY className={styles.scrollView} scrollTop={top}
       lowerThreshold={300}
       onScrollToLower={() => {
                   console.log('lower')

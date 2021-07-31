@@ -72,5 +72,8 @@ module.exports = function (merge) {
   if (process.env.NODE_ENV === 'development') {
     return merge({}, config, require('./dev'))
   }
+  if (process.env.NODE_ENV === 'staging') {
+    return merge({}, config, require('./staging'))
+  }
   return merge({}, config, require('./prod'))
 }
