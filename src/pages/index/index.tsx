@@ -17,7 +17,6 @@ const Index = () => {
 
   const [loading, setLoading] = React.useState(false)
 
-
   const [noMore, setNoMore] = React.useState(false)
 
   const [task, setTask] = React.useState<Taro.SocketTask | undefined>()
