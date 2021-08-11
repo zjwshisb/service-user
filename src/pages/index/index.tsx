@@ -3,14 +3,16 @@ import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {getMessages} from "@/api";
 import {getToken} from "@/util/auth";
-import {isWeapp, isH5} from "@/util/env";
+import {isH5, isWeapp} from "@/util/env";
+import {AtActivityIndicator} from "taro-ui";
 import styles from './index.module.less'
 
 import SendContext from './context'
 import Input from './components/Input'
 import MessageContent from './components/MessageContent/index'
 
-const pageSize = 100
+
+const pageSize = 30
 
 const Index = () => {
 
@@ -29,6 +31,7 @@ const Index = () => {
       url: `${WS_URL}/user/ws?token=` + getToken()
     }).then(t => {
       t.onError(() => {
+        setTask(undefined)
         Taro.showToast({
           title: '连接服务器失败',
           icon: 'none'
@@ -64,16 +67,16 @@ const Index = () => {
   const init = React.useCallback(() => {
     setNoMore(false)
     getMessages(undefined, pageSize).then(res => {
-      if (res.data.length < 100) {
+      if (res.data.length < pageSize) {
         setNoMore(true)
       }
       setMessages(res.data)
       connect()
     })
-  }, [connect])
+  } ,[connect])
 
 
-  const send = React.useCallback((act: APP.Action): Promise<boolean> => {
+  const send = React.useCallback((act: APP.Action) : Promise<boolean> => {
     return (new Promise((resolve, reject) => {
       if (task) {
         task.send({
@@ -111,10 +114,15 @@ const Index = () => {
     }))
   }, [connect, task])
 
+
   const close = React.useCallback(() => {
-    if (isWeapp()) {
-      Taro.closeSocket().then().catch(err => {
-        console.log(err)
+    if (isWeapp()){
+      setTask(prevState => {
+        if (prevState) {
+          Taro.closeSocket().then().catch(() => {
+          })
+        }
+        return undefined
       })
     }
     if (isH5()) {
@@ -125,50 +133,49 @@ const Index = () => {
         return undefined
       })
     }
-  }, [])
-
+  } ,[])
 
   React.useEffect(() => {
     init()
     return () => {
       close()
     }
-  }, [close, init])
+  } ,[close, init])
 
 
   const getMoreMessage = React.useCallback(async () => {
-    if (!loading && !noMore) {
+    if (!loading  && !noMore) {
       setLoading(true)
       if (messages.length > 0) {
         const id = messages[messages.length - 1].id
         if (id) {
           const res = await getMessages(id, pageSize)
-          setLoading(false)
           setMessages(prevState => {
+            setLoading(false)
             return [...prevState.concat(res.data)]
           })
-          if (res.data.length < 100) {
+          if (res.data.length < pageSize) {
             setNoMore(true)
           }
         }
       }
     }
-
   }, [loading, messages, noMore])
 
   return (
     <SendContext.Provider value={send}>
       <View className={styles.index}>
         <View className={styles.messageContent}>
-          <MessageContent messages={messages} top={toTop}>
+          <MessageContent messages={messages} top={toTop} onScrollTop={getMoreMessage}>
             {
-              noMore && messages.length > 50 && <View className={styles.loadMore}>
-                没有更多了
+              loading &&
+              <View className={styles.loading}>
+                <AtActivityIndicator color='#999999' size={25} content='加载中' mode='center' />
               </View>
             }
             {
-              (!noMore && messages.length >= pageSize) && <View className={styles.loadMore} onClick={getMoreMessage}>
-                点击加载更多
+              noMore && messages.length > pageSize && <View className={styles.notice}>
+                没有更多了
               </View>
             }
           </MessageContent>

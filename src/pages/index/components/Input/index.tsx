@@ -3,7 +3,7 @@ import {View, Input, Image} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import {newAction} from "@/util/action";
 import {getToken} from "@/util/auth"
-import {getTemplateId, handleSubscribe} from "@/api";
+import {getTemplateId, handleSubscribe} from "@/api/index";
 import PictureImg from '@/asset/img/picture.png'
 import styles from './index.module.less'
 import context from "../../context";
@@ -18,7 +18,6 @@ const Index = () => {
 
   const [isIphonex, setIphonex] = React.useState(false)
 
-
   React.useEffect(() => {
     if (Taro.getEnv() === Taro.ENV_TYPE.WEAPP) {
       getTemplateId().then(res => {
@@ -27,9 +26,11 @@ const Index = () => {
     }
     setIphonex(() => {
       const model = Taro.getSystemInfoSync().model
-      return /iphone\sx/i.test(model) || (/iphone/i.test(model) && /unknown/.test(model)) || /iphone\s11/i.test(model);
+      return /iphone\sx/i.test(model) || (/iphone/i.test(model) && /unknown/.test(model)) || /iphone\s11/i.test(model)
+         || /iphone\s12/.test(model);
     })
   }, [])
+
 
   const send = React.useContext(context)
 
@@ -57,7 +58,7 @@ const Index = () => {
             Authorization: 'Bearer ' + getToken()
           },
           name: "file",
-          url: BASE_URL + "/ws/image",
+          url: BASE_URL + "/user/ws/image",
           filePath: path
         }).then(r => {
           if (send) {
@@ -81,9 +82,9 @@ const Index = () => {
           confirmHold
           onConfirm={e => {
                  if (send && e.detail.value.length > 0) {
-                   if (send(newAction(e.detail.value))) {
+                   send(newAction(e.detail.value)).then(() => {
                      setValue('')
-                   }
+                   })
                  }
                }}
         />

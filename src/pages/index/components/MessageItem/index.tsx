@@ -7,7 +7,7 @@ import Avatar from '../../../../components/UserAvatar/Index'
 import styles from './index.module.less'
 
 const Index: React.FC<{
-  message: APP.Message
+  message: API.Message
 }> = props => {
   return <View className={`${styles.messageItem} ${props.message.source === 0 ? styles.right : ''}`}>
     {
