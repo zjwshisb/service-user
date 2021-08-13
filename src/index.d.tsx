@@ -15,7 +15,7 @@ declare namespace APP {
     url: string
   }
 
-  export type MessageType = 'text' | 'image' | 'navigator'
+  export type MessageType = 'text' | 'image' | 'navigator' | 'notice'
 
   export type NavigatorContent = {
     content: string,
@@ -30,6 +30,7 @@ declare namespace APP {
     source: number,
     req_id: number,
     avatar : string,
-    received_at: number
+    received_at: number,
+    admin_name: string
   }
 }
