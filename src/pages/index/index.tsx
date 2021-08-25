@@ -73,7 +73,7 @@ const Index = () => {
       }
       setMessages(res.data)
       connect()
-    })
+    }).catch(() => {})
   } ,[connect])
 
 
@@ -150,13 +150,17 @@ const Index = () => {
       if (messages.length > 0) {
         const id = messages[messages.length - 1].id
         if (id) {
-          const res = await getMessages(id, pageSize)
-          setMessages(prevState => {
-            setLoading(false)
-            return [...prevState.concat(res.data)]
-          })
-          if (res.data.length < pageSize) {
-            setNoMore(true)
+          try {
+            const res = await getMessages(id, pageSize)
+            setMessages(prevState => {
+              setLoading(false)
+              return [...prevState.concat(res.data)]
+            })
+            if (res.data.length < pageSize) {
+              setNoMore(true)
+            }
+          }catch (e) {
+
           }
         }
       }

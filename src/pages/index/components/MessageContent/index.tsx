@@ -1,5 +1,5 @@
 import React from 'react'
-import {ScrollView} from '@tarojs/components'
+import {ScrollView, View} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import styles from './index.module.less'
 import MessageItem from "../MessageItem/index"
@@ -54,6 +54,7 @@ const Index: React.FC<{
         })
       }
       {props.children}
+      <View className={styles.space}>&nbsp;</View>
     </ScrollView>
   )
 }
