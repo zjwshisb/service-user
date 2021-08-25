@@ -64,7 +64,7 @@ const Index = () => {
           if (send) {
             const result: APP.Resp<APP.ImageResp> = JSON.parse(r.data)
             if (result.success) {
-              send(newAction(result.data.url, 'image'))
+              send(newAction(result.data.url, 'image')).then().catch()
             }
           }
         })

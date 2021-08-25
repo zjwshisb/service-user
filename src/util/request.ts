@@ -12,10 +12,14 @@ function request<T = any>(options: Taro.request.Option) : Promise<APP.Resp<T>> {
   }
   options.url = BASE_URL + options.url
   return Taro.request(options).then(res => {
-    // 小程序请求有响应都进入这里
+    // 小程序请求有响应和h5(200)响应都进入这里
     switch (res.statusCode) {
       case 200: {
-        return Promise.resolve(res.data)
+        if (res.data.success === false) {
+          return Promise.reject(res.data)
+        } else {
+          return Promise.resolve(res.data)
+        }
       }
       case 401: {
         removeToken()
@@ -49,38 +53,47 @@ function request<T = any>(options: Taro.request.Option) : Promise<APP.Resp<T>> {
         return Promise.reject(res)
     }
   }).catch(res => {
-    // h5非200会进入这里
-    switch (res.status) {
-      case 401: {
-        removeToken()
-        Taro.reLaunch({
-          url: '/pages/login/index'
-        })
-        return Promise.reject(res)
+
+    if (res.status) { // h5非200会进入这里
+      switch (res.status) {
+        case 401: {
+          removeToken()
+          Taro.reLaunch({
+            url: '/pages/login/index'
+          })
+          return Promise.reject(res)
+        }
+        case 404: {
+          Taro.showToast({
+            title: '数据不见啦！',
+            icon: "none",
+            mask: true
+          }).catch()
+          return Promise.reject(res)
+        }
+        case 422: {
+          break
+        }
+        case 500:
+        case 502:
+        case 503:
+        case 504:
+          Taro.showToast({
+            title: '服务器发生了点问题',
+            icon: "none",
+            mask: true
+          }).catch()
+          return Promise.reject(res)
+        default:
+          return Promise.reject(res)
       }
-      case 404: {
-        Taro.showToast({
-          title: '数据不见啦！',
-          icon: "none",
-          mask: true
-        }).catch()
-        return Promise.reject(res)
-      }
-      case 422: {
-        break
-      }
-      case 500:
-      case 502:
-      case 503:
-      case 504:
-        Taro.showToast({
-          title: '服务器发生了点问题',
-          icon: "none",
-          mask: true
-        }).catch()
-        return Promise.reject(res)
-      default:
-        return Promise.reject(res)
+
+    } else { // 小程序请求失败
+      Taro.showToast({
+        icon: 'none',
+        title: '服务器无响应'
+      })
+      return Promise.reject(res)
     }
   })
 }

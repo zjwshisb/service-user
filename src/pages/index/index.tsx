@@ -24,11 +24,12 @@ const Index = () => {
 
   const [task, setTask] = React.useState<Taro.SocketTask | undefined>()
 
+  // 控制滚动条滚动到底部
   const [toTop, setToTop] = React.useState(false)
 
   const connect = React.useCallback(() => {
     Taro.connectSocket({
-      url: `${WS_URL}/user/ws?token=` + getToken()
+      url: `${WS_URL}?token=` + getToken()
     }).then(t => {
       t.onError(() => {
         setTask(undefined)

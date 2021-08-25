@@ -1,7 +1,8 @@
 .notice{
   width: 100%;
   text-align: center;
-  font-size: 26px;
+  font-size: 24px;
+  margin: 10px 0;
   .text {
     display: inline-block;
     max-width: 300px;
@@ -20,12 +21,12 @@
   box-sizing: border-box;
   &.right{
     flex-direction: row-reverse;
-    & > .content.text {
-      background-color: #95EC69;
-      color: #0F170A;
-    }
     &>.body{
       align-items: flex-end;
+      & > .content.text {
+        background-color: #95EC69;
+        color: #0F170A;
+      }
     }
   }
   & > .messageAvatar {

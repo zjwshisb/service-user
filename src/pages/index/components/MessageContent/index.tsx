@@ -14,14 +14,12 @@ const Index: React.FC<{
 
   const [height, setHeight] = React.useState(0)
 
-
-
-
   Taro.useReady(() => {
     const query = Taro.createSelectorQuery()
     query.select('#content').boundingClientRect()
     query.selectViewport().scrollOffset()
     query.exec(function(res){
+      console.log(res)
       setHeight(res[0].height)
     })
   })
