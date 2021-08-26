@@ -1,6 +1,7 @@
 import React from 'react'
 import {ScrollView, View} from '@tarojs/components'
 import Taro from '@tarojs/taro'
+import {isH5, isWeapp} from "@/util/env";
 import styles from './index.module.less'
 import MessageItem from "../MessageItem/index"
 
@@ -14,6 +15,8 @@ const Index: React.FC<{
 
   const [height, setHeight] = React.useState(0)
 
+  const view = React.useRef<HTMLDivElement>()
+
   Taro.useReady(() => {
     const query = Taro.createSelectorQuery()
     query.select('#content').boundingClientRect()
@@ -26,13 +29,22 @@ const Index: React.FC<{
   })
 
   React.useEffect(() => {
-    setTop(prevState => {
-      if (prevState === -1) {
-        return -2
-      } else {
-        return -1
+    if (isWeapp()) {
+      setTop(prevState => {
+        if (prevState === -1) {
+          return -2
+        } else {
+          return -1
+        }
+      })
+    }
+    // h5用上面这个方法会出Bug
+    if (isH5()) {
+      if (view.current) {
+        view.current.scrollTop = 0
       }
-    })
+    }
+
   }, [props.top])
 
   React.useEffect(() => {
@@ -42,6 +54,7 @@ const Index: React.FC<{
   return (
     <ScrollView id='content' className={styles.scrollView} scrollTop={top} scrollY
       enableFlex
+      ref={view}
       onScroll={e => {
         const t = (height - e.detail.scrollTop) - e.detail.scrollHeight
         if (t > -30) {

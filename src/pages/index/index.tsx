@@ -49,10 +49,7 @@ const Index = () => {
               setMessages(prev => {
                 return [msg].concat(prev)
               })
-              // h5下这里会有莫名其妙的bug
-              if (isWeapp()) {
-                setToTop(prevState => !prevState)
-              }
+              setToTop(prevState => !prevState)
             }
           }
         }
@@ -87,9 +84,7 @@ const Index = () => {
               return [...[act.data].concat(prev)]
             })
             // h5下这里会有莫名其妙的bug，所以去掉
-            if (isWeapp()) {
-              setToTop(prevState => !prevState)
-            }
+            setToTop(prevState => !prevState)
             resolve(true)
           },
           fail: res => {
