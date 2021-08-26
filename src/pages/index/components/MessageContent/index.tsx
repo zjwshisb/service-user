@@ -19,8 +19,9 @@ const Index: React.FC<{
     query.select('#content').boundingClientRect()
     query.selectViewport().scrollOffset()
     query.exec(function(res){
-      console.log(res)
-      setHeight(res[0].height)
+      if (res.length > 0 && res[0]) {
+        setHeight(res[0].height)
+      }
     })
   })
 
