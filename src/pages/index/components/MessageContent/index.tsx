@@ -13,20 +13,7 @@ const Index: React.FC<{
 
   const [top, setTop] = React.useState(0)
 
-  const [height, setHeight] = React.useState(0)
-
   const view = React.useRef<HTMLDivElement>()
-
-  Taro.useReady(() => {
-    const query = Taro.createSelectorQuery()
-    query.select('#content').boundingClientRect()
-    query.selectViewport().scrollOffset()
-    query.exec(function(res){
-      if (res.length > 0 && res[0]) {
-        setHeight(res[0].height)
-      }
-    })
-  })
 
   React.useEffect(() => {
     if (isWeapp()) {
@@ -56,10 +43,13 @@ const Index: React.FC<{
       enableFlex
       ref={view}
       onScroll={e => {
-        const t = (height - e.detail.scrollTop) - e.detail.scrollHeight
-        if (t > -30) {
-          props.onScrollTop()
-        }
+        Taro.createSelectorQuery().select('#content').boundingClientRect().exec(rect => {
+          const h = rect[0].height
+          const t = (h - e.detail.scrollTop) - e.detail.scrollHeight
+          if (t > -30) {
+            props.onScrollTop()
+          }
+        })
       }}
     >
       {

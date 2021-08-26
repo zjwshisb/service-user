@@ -162,9 +162,25 @@ const Index = () => {
     }
   }, [loading, messages, noMore])
 
+  // h5模式下，用手机内置的浏览器打开100vh并不是实际的高度
+  const cusStyles = React.useMemo(() => {
+    if (isH5()) {
+      console.log(window.innerHeight)
+      return {
+        height: window.innerHeight + "px"
+      }
+    }
+    if (isWeapp()) {
+      return {
+        height: "100vh"
+      }
+    }
+    return {}
+  }, [])
+
   return (
     <SendContext.Provider value={send}>
-      <View className={styles.index}>
+      <View className={styles.index} style={cusStyles}>
         <View className={styles.messageContent}>
           <MessageContent messages={messages} top={toTop} onScrollTop={getMoreMessage}>
             {
