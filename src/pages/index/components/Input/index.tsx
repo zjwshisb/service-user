@@ -58,7 +58,7 @@ const Index = () => {
             Authorization: 'Bearer ' + getToken()
           },
           name: "file",
-          url: BASE_URL + "/user/ws/image",
+          url: BASE_URL + "/ws/image",
           filePath: path
         }).then(r => {
           if (send) {
