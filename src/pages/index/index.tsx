@@ -165,7 +165,6 @@ const Index = () => {
   // h5模式下，用手机内置的浏览器打开100vh并不是实际的高度
   const cusStyles = React.useMemo(() => {
     if (isH5()) {
-      console.log(window.innerHeight)
       return {
         height: window.innerHeight + "px"
       }
