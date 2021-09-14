@@ -83,7 +83,6 @@ const Index = () => {
             setMessages(prev => {
               return [...[act.data].concat(prev)]
             })
-            // h5下这里会有莫名其妙的bug，所以去掉
             setToTop(prevState => !prevState)
             resolve(true)
           },
@@ -189,7 +188,7 @@ const Index = () => {
               </View>
             }
             {
-              noMore && messages.length > pageSize && <View className={styles.notice}>
+              noMore && <View className={styles.notice}>
                 没有更多了
               </View>
             }
