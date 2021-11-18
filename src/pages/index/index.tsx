@@ -70,11 +70,19 @@ const Index = () => {
       }
       setMessages(res.data)
       connect()
-    }).catch(() => {})
-  } ,[connect])
+    }).catch(() => {
+    })
+  }, [connect])
 
+  React.useEffect(() => {
+    if (isH5()) {
+      window.onresize = () => {
+        window.location.reload()
+      }
+    }
+  }, [])
 
-  const send = React.useCallback((act: APP.Action) : Promise<boolean> => {
+  const send = React.useCallback((act: APP.Action): Promise<boolean> => {
     return (new Promise((resolve, reject) => {
       if (task) {
         task.send({
@@ -111,7 +119,7 @@ const Index = () => {
 
 
   const close = React.useCallback(() => {
-    if (isWeapp()){
+    if (isWeapp()) {
       setTask(prevState => {
         if (prevState) {
           Taro.closeSocket().then().catch(() => {
@@ -128,18 +136,18 @@ const Index = () => {
         return undefined
       })
     }
-  } ,[])
+  }, [])
 
   React.useEffect(() => {
     init()
     return () => {
       close()
     }
-  } ,[close, init])
+  }, [close, init])
 
 
   const getMoreMessage = React.useCallback(async () => {
-    if (!loading  && !noMore) {
+    if (!loading && !noMore) {
       setLoading(true)
       if (messages.length > 0) {
         const id = messages[messages.length - 1].id
@@ -153,7 +161,7 @@ const Index = () => {
             if (res.data.length < pageSize) {
               setNoMore(true)
             }
-          }catch (e) {
+          } catch (e) {
 
           }
         }

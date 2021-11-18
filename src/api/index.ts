@@ -7,6 +7,12 @@ export const handleLogin = (data) => {
     data
   })
 }
+export const getReqId = () => {
+  return request<{reqId: number}>({
+    url: "/ws/req-id",
+    method: "POST"
+  })
+}
 export const getTemplateId = () => {
   return request<{id: string}>({
     url: '/template-id',

@@ -64,7 +64,9 @@ const Index = () => {
           if (send) {
             const result: APP.Resp<APP.ImageResp> = JSON.parse(r.data)
             if (result.success) {
-              send(newAction(result.data.url, 'image')).then().catch()
+              newAction(result.data.url, 'image').then(act => {
+                send(act).then().catch()
+              })
             }
           }
         })
@@ -82,8 +84,10 @@ const Index = () => {
           confirmHold
           onConfirm={e => {
                  if (send && e.detail.value.length > 0) {
-                   send(newAction(e.detail.value)).then(() => {
-                     setValue('')
+                   newAction(e.detail.value).then(act => {
+                     send(act).then(() => {
+                       setValue('')
+                     })
                    })
                  }
                }}

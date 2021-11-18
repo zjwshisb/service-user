@@ -54,7 +54,7 @@ const Index: React.FC<{
     >
       {
         props.messages.map(v => {
-          return <MessageItem message={v} key={v.req_id} />
+          return <MessageItem message={v} key={v.source + v.req_id} />
         })
       }
       {props.children}
