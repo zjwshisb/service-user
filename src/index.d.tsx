@@ -31,6 +31,7 @@ declare namespace APP {
     req_id: number,
     avatar : string,
     received_at: number,
-    admin_name?: string
+    admin_name?: string,
+    admin_id: number
   }
 }

@@ -24,6 +24,8 @@ const Index = () => {
 
   const [task, setTask] = React.useState<Taro.SocketTask | undefined>()
 
+  const [waitingCount, setWaitingCount] = React.useState<number>(0)
+
   // 控制滚动条滚动到底部
   const [toTop, setToTop] = React.useState(false)
 
@@ -42,16 +44,30 @@ const Index = () => {
       })
       t.onMessage(result => {
         if (result.data != '') {
-          const action: APP.Action = JSON.parse(result.data)
-          switch (action.action) {
-            case 'receive-message': {
-              const msg = action.data as APP.Message
-              setMessages(prev => {
-                return [msg].concat(prev)
-              })
-              setToTop(prevState => !prevState)
+          try {
+            const action: APP.Action = JSON.parse(result.data)
+            switch (action.action) {
+              case 'receive-message': {
+                const msg = action.data as APP.Message
+                setMessages(prev => {
+                  return [msg].concat(prev)
+                })
+                if (msg.admin_id > 0) { // 说明已被接入
+                  setWaitingCount(0)
+                }
+                setToTop(prevState => !prevState)
+                break
+              }
+              case "waiting-user-count": {
+                const count = action.data
+                setWaitingCount(count)
+                break
+              }
             }
+          }catch (e) {
+
           }
+
         }
       })
       t.onClose(() => {
@@ -187,6 +203,12 @@ const Index = () => {
   return (
     <SendContext.Provider value={send}>
       <View className={styles.index} style={cusStyles}>
+        {
+          waitingCount > 0 &&  <View className={styles.waitingCount}>
+            前面还有{waitingCount}人在等待
+          </View>
+        }
+
         <View className={styles.messageContent}>
           <MessageContent messages={messages} top={toTop} onScrollTop={getMoreMessage}>
             {
