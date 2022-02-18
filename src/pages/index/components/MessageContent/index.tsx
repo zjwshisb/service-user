@@ -1,5 +1,5 @@
 import React from 'react'
-import {ScrollView, View} from '@tarojs/components'
+import {ScrollView} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import {isH5, isWeapp} from "@/util/env";
 import styles from './index.module.less'
@@ -34,8 +34,6 @@ const Index: React.FC<{
 
   }, [props.top])
 
-  React.useEffect(() => {
-  }, [props.messages])
 
 
   return (
@@ -44,6 +42,7 @@ const Index: React.FC<{
       ref={view}
       onScroll={e => {
         Taro.createSelectorQuery().select('#content').boundingClientRect().exec(rect => {
+          console.log(rect)
           const h = rect[0].height
           const t = (h - e.detail.scrollTop) - e.detail.scrollHeight
           if (t > -30) {
@@ -58,7 +57,6 @@ const Index: React.FC<{
         })
       }
       {props.children}
-      <View className={styles.space}>&nbsp;</View>
     </ScrollView>
   )
 }

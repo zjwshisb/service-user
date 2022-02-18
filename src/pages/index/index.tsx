@@ -90,13 +90,6 @@ const Index = () => {
     })
   }, [connect])
 
-  React.useEffect(() => {
-    if (isH5()) {
-      window.onresize = () => {
-        window.location.reload()
-      }
-    }
-  }, [])
 
   const send = React.useCallback((act: APP.Action): Promise<boolean> => {
     return (new Promise((resolve, reject) => {
@@ -153,6 +146,15 @@ const Index = () => {
       })
     }
   }, [])
+
+  React.useEffect(() => {
+    if (isH5()) {
+      window.onresize = () => {
+        window.location.reload()
+      }
+    }
+  }, [])
+
 
   React.useEffect(() => {
     init()
