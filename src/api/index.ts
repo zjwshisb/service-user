@@ -28,6 +28,15 @@ export const getMessages = (id?: number, size = 100) => {
     }
   })
 }
+export const handleRead = (msgId: number) => {
+  return request({
+    url: '/ws/read',
+    method:"POST",
+    data: {
+      msg_id: msgId,
+    }
+  })
+}
 export const handleSubscribe = () => {
   return request({
     url: '/subscribe',

@@ -1,7 +1,7 @@
 import React from 'react'
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
-import {getMessages} from "@/api";
+import {getMessages, handleRead} from "@/api";
 import {getToken} from "@/util/auth";
 import {isH5, isWeapp} from "@/util/env";
 import {AtActivityIndicator} from "taro-ui";
@@ -49,6 +49,9 @@ const Index = () => {
             switch (action.action) {
               case 'receive-message': {
                 const msg = action.data as APP.Message
+                if (msg.id) {
+                  handleRead(msg.id).then().catch()
+                }
                 setMessages(prev => {
                   return [msg].concat(prev)
                 })

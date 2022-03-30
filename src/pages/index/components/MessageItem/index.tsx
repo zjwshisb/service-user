@@ -10,7 +10,8 @@ const Index: React.FC<{
   message: APP.Message
 }> = props => {
   let item : JSX.Element = <></>
-  const CustAvatar = props.message.source !== 0 ? <Image src={props.message.avatar} className={styles.messageAvatar} />
+  const CustAvatar = props.message.source !== 0 && props.message.avatar ?
+    <Image src={props.message.avatar} className={styles.messageAvatar} />
     : <Avatar />
     const name =  props.message.source !== 0 ? <View className={styles.name}>{props.message.admin_name}</View> : <></>
 
