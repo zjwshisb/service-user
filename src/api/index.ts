@@ -8,9 +8,9 @@ export const handleLogin = (data) => {
   })
 }
 export const getReqId = () => {
-  return request<{reqId: number}>({
-    url: "/ws/req-id",
-    method: "POST"
+  return request<{req_id: string}>({
+    url: "/chat/req-id",
+    method: "GET"
   })
 }
 export const getTemplateId = () => {
@@ -21,7 +21,7 @@ export const getTemplateId = () => {
 }
 export const getMessages = (id?: number, size = 100) => {
   return request<APP.Message[]>({
-    url: '/ws/messages',
+    url: '/chat/messages',
     data: {
       id,
       size
@@ -30,7 +30,7 @@ export const getMessages = (id?: number, size = 100) => {
 }
 export const handleRead = (msgId: number) => {
   return request({
-    url: '/ws/read',
+    url: '/chat/read',
     method:"POST",
     data: {
       msg_id: msgId,

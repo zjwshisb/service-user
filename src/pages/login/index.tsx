@@ -23,8 +23,6 @@ const Index = () => {
         Taro.showToast({
           title: err.message,
           duration: 3
-        }).catch(e => {
-          console.log(e)
         })
       }
     })
