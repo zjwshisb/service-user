@@ -18,7 +18,7 @@ declare namespace APP {
   export type MessageType = 'text' | 'image' | 'navigator' | 'notice'
 
   export type NavigatorContent = {
-    content: string,
+    image: string,
     title: string,
     url: string
   }

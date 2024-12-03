@@ -23,7 +23,7 @@ const Index: React.FC<{
 
   return <View className={`${styles.content} ${styles.navigator}`}>
     <View className={styles.card} onClick={() => goto(item.url)}>
-      <Image className={styles.image} src={item.content} lazyLoad />
+      <Image className={styles.image} src={item.image} lazyLoad />
       <View className={styles.title}>{item.title}</View>
     </View>
   </View>

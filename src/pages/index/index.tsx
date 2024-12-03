@@ -83,7 +83,7 @@ const Index = () => {
 
   const init = React.useCallback(() => {
     setNoMore(false)
-    getMessages(undefined, pageSize).then(res => {
+    getMessages(pageSize,).then(res => {
       if (res.data.length < pageSize) {
         setNoMore(true)
       }
@@ -174,7 +174,7 @@ const Index = () => {
         const id = messages[messages.length - 1].id
         if (id) {
           try {
-            const res = await getMessages(id, pageSize)
+            const res = await getMessages(pageSize, id)
             setMessages(prevState => {
               setLoading(false)
               return [...prevState.concat(res.data)]

@@ -19,13 +19,16 @@ export const getTemplateId = () => {
     method: 'GET'
   })
 }
-export const getMessages = (id?: number, size = 100) => {
+export const getMessages = ( size = 20, id?: number) => {
+  const data = {
+    pageSize: size ,
+  }
+  if (id) {
+    data['id'] = id
+  }
   return request<APP.Message[]>({
     url: '/chat/messages',
-    data: {
-      id,
-      size
-    }
+    data
   })
 }
 export const handleRead = (msgId: number) => {

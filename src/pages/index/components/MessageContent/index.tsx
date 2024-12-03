@@ -42,7 +42,6 @@ const Index: React.FC<{
       ref={view}
       onScroll={e => {
         Taro.createSelectorQuery().select('#content').boundingClientRect().exec(rect => {
-          console.log(rect)
           const h = rect[0].height
           const t = (h - e.detail.scrollTop) - e.detail.scrollHeight
           if (t > -30) {
