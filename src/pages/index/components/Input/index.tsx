@@ -85,7 +85,6 @@ const Index = () => {
           onConfirm={e => {
                  if (send && e.detail.value.length > 0) {
                    newAction(e.detail.value).then(act => {
-                     console.log(act)
                      send(act).then(() => {
                        setValue('')
                      })

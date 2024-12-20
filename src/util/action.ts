@@ -1,6 +1,6 @@
 import {getReqId} from "@/api";
 
-export async function newAction(content, type: APP.MessageType = "text") : Promise<APP.Action<APP.Message>> {
+export async function newAction(content: string, type: APP.MessageType = "text") : Promise<APP.Action<APP.Message>> {
   const time = parseInt(((new Date()).getTime() / 1000).toFixed(0))
   const reqId = await getReqId().then(res => res.data.req_id)
   return {
