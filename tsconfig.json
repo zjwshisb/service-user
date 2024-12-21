@@ -9,7 +9,7 @@
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
     "outDir": "lib",
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strictNullChecks": true,
     "sourceMap": true,
@@ -20,15 +20,11 @@
     "resolveJsonModule": true,
     "typeRoots": [
       "node_modules/@types",
-      "global.d.ts"
     ],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "include": ["./src", "./types" ,"global.d.ts"],
   "compileOnSave": false
 }

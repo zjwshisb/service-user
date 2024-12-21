@@ -1,15 +1,17 @@
-import { Provider } from 'react-redux'
+import { Provider } from 'mobx-react'
 import 'taro-ui/dist/style/index.scss' // 全局引入一次即可
-import React from "react";
 
-import configStore from './store'
+import counterStore from './store/counter'
 
 
 import './app.less'
+import React from "react";
 
-const store = configStore()
+const store = {
+  counterStore
+}
 
-const index = (props) => {
+const index :React.FC<React.PropsWithChildren> = (props) => {
     return (
       <Provider store={store}>
         {props.children}

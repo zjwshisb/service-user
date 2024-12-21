@@ -3,7 +3,6 @@ import {View, Input, Image} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import {newAction} from "@/util/action";
 import {getToken} from "@/util/auth"
-import {getTemplateId, handleSubscribe} from "@/api";
 import PictureImg from '@/asset/img/picture.png'
 import styles from './index.module.less'
 import context from "../../context";
@@ -12,18 +11,11 @@ const Index = () => {
 
   const [value, setValue] = React.useState('')
 
-  const [templateId, setTemplateId] = React.useState('')
 
-  const [hadSubscribe, setHadSubscribe] = React.useState<boolean>(false)
 
   const [isIphonex, setIphonex] = React.useState(false)
 
   React.useEffect(() => {
-    if (Taro.getEnv() === Taro.ENV_TYPE.WEAPP) {
-      getTemplateId().then(res => {
-        setTemplateId(res.data.id)
-      })
-    }
     setIphonex(() => {
       const model = Taro.getSystemInfoSync().model
       return /iphone\sx/i.test(model) || (/iphone/i.test(model) && /unknown/.test(model)) || /iphone\s11/i.test(model)
@@ -34,21 +26,6 @@ const Index = () => {
 
   const send = React.useContext(context)
 
-  const subscribeMessage = React.useCallback(() => {
-    if (templateId !== '' && !hadSubscribe) {
-      Taro.requestSubscribeMessage({
-        tmplIds: [templateId]
-      }).then(r => {
-        setHadSubscribe(true)
-        if (r[templateId] === 'accept') {
-          handleSubscribe().then().catch()
-        }
-      }).catch(() => {
-        setHadSubscribe(true)
-      })
-    }
-
-  }, [hadSubscribe, templateId])
 
   const selectImg = React.useCallback(() => {
     Taro.chooseImage({}).then(res => {
@@ -78,7 +55,6 @@ const Index = () => {
     <View className={`${styles.inputArea} ${isIphonex ? styles.iphonex : ''}`}>
       <View className={styles.input}>
         <Input cursorSpacing={20}
-          onClick={subscribeMessage}
           value={value}
           onInput={e => setValue(e.detail.value)}
           confirmHold

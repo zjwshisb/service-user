@@ -213,7 +213,6 @@ const Index = () => {
             前面还有{waitingCount}人在等待
           </View>
         }
-
         <View className={styles.messageContent}>
           <MessageContent messages={messages} top={toTop} onScrollTop={getMoreMessage}>
             {

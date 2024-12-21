@@ -5,11 +5,11 @@ import {isH5, isWeapp} from "@/util/env";
 import styles from './index.module.less'
 import MessageItem from "../MessageItem/index"
 
-const Index: React.FC<{
+const Index: React.FC<React.PropsWithChildren<{
   messages: APP.Message[],
   top: boolean,
   onScrollTop: () => void
-}> = (props) => {
+}>> = (props) => {
 
   const [top, setTop] = React.useState(0)
 

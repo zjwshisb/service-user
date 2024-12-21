@@ -1,4 +1,3 @@
-import React from 'react'
 import Taro from "@tarojs/taro";
 import {Image, OpenData, View} from "@tarojs/components";
 import DefaultAvatar from '../../asset/img/default.png'

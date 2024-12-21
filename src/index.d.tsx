@@ -33,6 +33,7 @@ declare namespace APP {
     avatar : string,
     received_at: number,
     admin_name?: string,
-    admin_id: number
+    admin_id: number,
+    is_read?: boolean
   }
 }

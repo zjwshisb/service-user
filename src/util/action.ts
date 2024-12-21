@@ -1,4 +1,4 @@
-import {getReqId} from "@/api";
+import {getReqId} from "@/api/index";
 
 export async function newAction(content: string, type: APP.MessageType = "text") : Promise<APP.Action<APP.Message>> {
   const time = parseInt(((new Date()).getTime() / 1000).toFixed(0))

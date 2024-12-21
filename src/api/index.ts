@@ -13,12 +13,7 @@ export const getReqId = () => {
     method: "GET"
   })
 }
-export const getTemplateId = () => {
-  return request<{id: string}>({
-    url: '/template-id',
-    method: 'GET'
-  })
-}
+
 export const getMessages = ( size = 20, id?: number) => {
   const data = {
     pageSize: size ,
@@ -38,11 +33,5 @@ export const handleRead = (msgId: number) => {
     data: {
       msg_id: msgId,
     }
-  })
-}
-export const handleSubscribe = () => {
-  return request({
-    url: '/subscribe',
-    method: 'POST'
   })
 }
