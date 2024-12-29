@@ -16,9 +16,9 @@ export const getReqId = () => {
 
 export const getMessages = ( size = 20, id?: number) => {
   const data = {
-    pageSize: size ,
+    pageSize: size,
   }
-  if (id) {
+  if (id !== undefined) {
     data['id'] = id
   }
   return request<APP.Message[]>({

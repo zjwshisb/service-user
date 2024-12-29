@@ -2,7 +2,6 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import {isPhone} from "@/util";
 import {Text, View} from "@tarojs/components";
-import styles from '../index.module.less'
 
 const Index: React.FC<{
   content: string
@@ -17,8 +16,8 @@ const Index: React.FC<{
   } ,[])
 
   return React.useMemo(() => {
-    return  <View className={`${styles.content} ${styles.text}`}>
-      <Text className={isPhone(props.content)? styles.phone : ''} onClick={() => makePhoneCall(props.content)}>{props.content}</Text>
+    return  <View className={"break-all"}>
+      <Text  onClick={() => makePhoneCall(props.content)}>{props.content}</Text>
     </View>
   } ,[makePhoneCall, props.content])
 }

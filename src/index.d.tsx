@@ -11,6 +11,12 @@ declare namespace APP {
     action: string,
   }
 
+  export type Receipt = {
+    msg_id: number,
+    req_id: string,
+    user_id: number
+  }
+
   export type ImageResp = {
     url: string
   }

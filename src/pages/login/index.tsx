@@ -1,11 +1,9 @@
 import React from 'react'
-import {View} from "@tarojs/components";
-import {AtForm, AtInput, AtButton} from "taro-ui";
+import {Button, Input, View} from "@tarojs/components";
 import Taro from "@tarojs/taro"
 import {setToken} from "@/util/auth";
 import {handleLogin} from "@/api";
 
-import './index.less'
 
 const Index = () => {
 
@@ -13,7 +11,22 @@ const Index = () => {
   const [password, setPassword] = React.useState('')
 
   const login = React.useCallback(form => {
+    if (!form.username) {
+      Taro.showToast({
+        icon:"none",
+        title: "请输入账号"
+      })
+      return
+    }
+    if (!form.password) {
+      Taro.showToast({
+        icon:"none",
+        title: "请输入密码"
+      })
+      return
+    }
     handleLogin(form).then(res => {
+
       setToken(res.data.token)
       Taro.navigateTo({
         url: '/pages/index/index'
@@ -29,24 +42,32 @@ const Index = () => {
   }, [])
 
   return (
-    <View className='login'>
-      <View className='title'>
+    <View className='pt-36'>
+      <View className='text-center mb-10'>
         客服系统用户端
       </View>
-      <AtForm customStyle={{border: "none"}}>
-        <AtInput title='登录账号' name='username' value={username} type='text'
-          onChange={value => setUsername(value.toString())}
-        />
-        <AtInput title='登录密码' name='password' value={password} type='password'
-          onChange={value => setPassword(value.toString())}
-        />
-      </AtForm>
-      <View className='action-content'>
-        <AtButton type='primary' size='small' formType='submit'  onClick={() => login({
+      <div className={"flex items-center flex-col px-[30px]"} style={{border: "20px", borderColor: "black"}}>
+        <View className={"mt-2 border-b border-gray-500 w-full"}>
+          <Input
+            placeholder={"请输入账号"}
+            name='username' value={username} type='text'
+            onInput={e => {
+              setUsername(e.detail.value)
+            }}
+          />
+        </View>
+        <View className={"border-b border-gray-500 mt-4 w-full"} style={{border: "1px"}}>
+          <Input name='password' value={password}
+                 placeholder={"请输入密码"}
+                 onInput={e => setPassword(e.detail.value)}
+          />
+        </View>
+        <Button type='primary' className={"mt-4"}  formType='submit'  onClick={() => login({
           username, password
         })}
-        >登录</AtButton>
-      </View>
+        >登录</Button>
+      </div>
+
     </View>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import {View, Image} from "@tarojs/components";
 import Taro from '@tarojs/taro'
-import styles from "../index.module.less";
 
 const Index: React.FC<{
   content: string
@@ -21,11 +20,9 @@ const Index: React.FC<{
     })
   }, [])
 
-  return <View className={`${styles.content} ${styles.navigator}`}>
-    <View className={styles.card} onClick={() => goto(item.url)}>
-      <Image className={styles.image} src={item.image} lazyLoad />
-      <View className={styles.title}>{item.title}</View>
+  return <View className={"bg-white border border-solid rounded overflow-hidden w-52 flex flex-col"} onClick={() => goto(item.url)}>
+      <Image className={"w-full h-32"} src={item.image} lazyLoad />
+      <View className={"text-base p-0.5 border-t border-solid"}>{item.title}</View>
     </View>
-  </View>
 }
 export default Index

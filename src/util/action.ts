@@ -11,7 +11,8 @@ export async function newAction(content: string, type: APP.MessageType = "text")
       req_id: reqId,
       source: 0,
       avatar: '',
-      received_at: time
+      received_at: time,
+      success: undefined,
     },
     time: time,
     action: 'send-message',

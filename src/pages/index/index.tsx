@@ -4,12 +4,10 @@ import {View} from '@tarojs/components'
 import {getMessages, handleRead} from "@/api";
 import {getToken} from "@/util/auth";
 import {isH5, isWeapp} from "@/util/env";
-import {AtActivityIndicator} from "taro-ui";
-import styles from './index.module.less'
 
 import SendContext from './context'
 import Input from './components/Input'
-import MessageContent from './components/MessageContent/index'
+import MessageContainer from './components/MessageContainer/index'
 
 
 const pageSize = 30
@@ -60,6 +58,24 @@ const Index = () => {
                 }
                 setToTop(prevState => !prevState)
                 break
+              }
+              case "receipt": {
+                const data : APP.Receipt = action.data
+                setMessages(prevState => {
+                  for (const x of prevState) {
+                    if (x.req_id === data.req_id) {
+                      x.id = data.msg_id;
+                      x.success = true;
+                      x.is_read = false;
+                    }
+                  }
+                  return [...prevState]
+                });
+                break;
+              }
+              case "read": {
+                const msgIds = action.data as number[]
+                break;
               }
               case "waiting-user-count": {
                 const count = action.data
@@ -207,26 +223,27 @@ const Index = () => {
 
   return (
     <SendContext.Provider value={send}>
-      <View className={styles.index} style={cusStyles}>
+      <View className={"flex flex-col justify-between w-full bg-[#f5f5f5] overflow-hidden"} style={cusStyles}>
         {
-          waitingCount > 0 &&  <View className={styles.waitingCount}>
+          waitingCount > 0 &&  <View className={"text-base bg-[#fcf6ed] text-[#de8c17] p-1"}>
             前面还有{waitingCount}人在等待
           </View>
         }
-        <View className={styles.messageContent}>
-          <MessageContent messages={messages} top={toTop} onScrollTop={getMoreMessage}>
+        <View className={"overflow-hidden flex"}>
+          <MessageContainer messages={messages} top={toTop} onScrollTop={getMoreMessage}>
             {
               loading &&
-              <View className={styles.loading}>
-                <AtActivityIndicator color='#999999' size={25} content='加载中' mode='center' />
+              <View className={"p-1 text-base text-center"}>
+                loading...
+                {/*<AtActivityIndicator color='#999999' size={25} content='加载中' mode='center' />*/}
               </View>
             }
             {
-              noMore && <View className={styles.notice}>
+              !loading && noMore && <View className={"text-center py-3 text-xs text-gray-600"}>
                 没有更多了
               </View>
             }
-          </MessageContent>
+          </MessageContainer>
         </View>
         <Input />
       </View>

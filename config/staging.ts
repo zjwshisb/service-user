@@ -6,4 +6,4 @@ export default {
   },
   mini: {},
   h5: {},
-} satisfies UserConfigExport<'vite'>
+} satisfies UserConfigExport<'webpack5'>

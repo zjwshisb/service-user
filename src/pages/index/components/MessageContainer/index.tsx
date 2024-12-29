@@ -2,7 +2,6 @@ import React from 'react'
 import {ScrollView} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import {isH5, isWeapp} from "@/util/env";
-import styles from './index.module.less'
 import MessageItem from "../MessageItem/index"
 
 const Index: React.FC<React.PropsWithChildren<{
@@ -37,7 +36,7 @@ const Index: React.FC<React.PropsWithChildren<{
 
 
   return (
-    <ScrollView id='content' className={styles.scrollView} scrollTop={top} scrollY
+    <ScrollView id='content' className={"flex flex-col-reverse h-auto pb-2"} scrollTop={top} scrollY
       enableFlex
       ref={view}
       onScroll={e => {

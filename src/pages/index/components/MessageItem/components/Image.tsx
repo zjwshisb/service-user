@@ -1,7 +1,6 @@
 import React from 'react'
-import { View,Image } from "@tarojs/components";
+import { Image } from "@tarojs/components";
 import Taro from '@tarojs/taro'
-import styles from '../index.module.less'
 
 const Index: React.FC<{
   content: string
@@ -13,14 +12,12 @@ const Index: React.FC<{
       }).then()
   }, [])
 
-  return  <View className={`${styles.content} ${styles.image}`}>
-      <Image lazyLoad
-        className={styles.image}
+  return <Image lazyLoad
+        className={"max-w-full"}
         showMenuByLongpress
         src={props.content}
         mode='widthFix'
         onClick={() => preview(props.content)}
       />
-    </View>
 }
 export default Index

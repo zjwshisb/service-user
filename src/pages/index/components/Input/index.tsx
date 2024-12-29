@@ -4,8 +4,8 @@ import Taro from '@tarojs/taro'
 import {newAction} from "@/util/action";
 import {getToken} from "@/util/auth"
 import PictureImg from '@/asset/img/picture.png'
-import styles from './index.module.less'
 import context from "../../context";
+import classNames from "classnames";
 
 const Index = () => {
 
@@ -52,10 +52,13 @@ const Index = () => {
   }, [send])
 
   return (
-    <View className={`${styles.inputArea} ${isIphonex ? styles.iphonex : ''}`}>
-      <View className={styles.input}>
+    <View className={classNames(`border-t border-solid flex flex-shrink-0 items-center bg-[#F5F6F7]`, {
+      "pb-9": isIphonex
+    })}>
+      <View className={"w-[80%] p-2 text-xl"}>
         <Input cursorSpacing={20}
           value={value}
+               className={"bg-white p-1 rounded"}
           onInput={e => setValue(e.detail.value)}
           confirmHold
           onConfirm={e => {
@@ -69,8 +72,8 @@ const Index = () => {
                }}
         />
       </View>
-      <View className={styles.action}>
-        <Image src={PictureImg} className={styles.icon} mode='widthFix' onClick={selectImg} />
+      <View className={"flex justify-between"}>
+        <Image src={PictureImg} className={"w-10 h-auto flex"} mode='widthFix' onClick={selectImg} />
       </View>
     </View>
   )
