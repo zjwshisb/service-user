@@ -13,7 +13,7 @@ const Index: React.FC<{
   }, [])
 
   return <Image lazyLoad
-        className={"max-w-full"}
+        className={"max-w-full h-auto"}
         showMenuByLongpress
         src={props.content}
         mode='widthFix'

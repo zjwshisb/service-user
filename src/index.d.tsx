@@ -17,11 +17,17 @@ declare namespace APP {
     user_id: number
   }
 
-  export type ImageResp = {
-    url: string
+  export type File = {
+    "id": number,
+    "path": string,
+    "url": string
+    "thumb_url": string
+    "name": string
+    "type": string
   }
 
-  export type MessageType = 'text' | 'image' | 'navigator' | 'notice'
+
+  export type MessageType = 'text' | 'image' | 'navigator' | 'notice' | "audio" | "video"
 
   export type NavigatorContent = {
     image: string,
@@ -41,5 +47,10 @@ declare namespace APP {
     admin_name?: string,
     admin_id: number,
     is_read?: boolean
+  }
+
+  export type ChatSetting = {
+    is_show_queue: boolean,
+    is_show_read: boolean
   }
 }

@@ -3,6 +3,7 @@ import {ScrollView} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import {isH5, isWeapp} from "@/util/env";
 import MessageItem from "../MessageItem/index"
+import context from "@/pages/index/context";
 
 const Index: React.FC<React.PropsWithChildren<{
   messages: APP.Message[],
@@ -35,6 +36,9 @@ const Index: React.FC<React.PropsWithChildren<{
 
 
 
+  const action = React.useContext(context)
+
+
   return (
     <ScrollView id='content' className={"flex flex-col-reverse h-auto pb-2"} scrollTop={top} scrollY
       enableFlex
@@ -51,7 +55,7 @@ const Index: React.FC<React.PropsWithChildren<{
     >
       {
         props.messages.map(v => {
-          return <MessageItem message={v} key={v.source + v.req_id} />
+          return <MessageItem message={v} key={v.source + v.req_id} showRead={action.is_show_read}/>
         })
       }
       {props.children}

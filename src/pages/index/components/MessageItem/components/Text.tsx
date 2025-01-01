@@ -16,7 +16,7 @@ const Index: React.FC<{
   } ,[])
 
   return React.useMemo(() => {
-    return  <View className={"break-all"}>
+    return  <View className={"break-all text-base py-1 px-1"}>
       <Text  onClick={() => makePhoneCall(props.content)}>{props.content}</Text>
     </View>
   } ,[makePhoneCall, props.content])

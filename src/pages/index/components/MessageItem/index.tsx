@@ -6,11 +6,14 @@ import Navigator from './components/Navigator'
 import Wrapper from "./components/Wrapper";
 import Avatar from '@/components/UserAvatar/Index'
 import Notice from './components/Notice'
+import Audio from './components/Audio'
+import Video from './components/Video'
 import classNames from "classnames";
 
 const Index: React.FC<{
   message: APP.Message
-}> = ({message}) => {
+  showRead?: boolean
+}> = ({showRead, message}) => {
   let item : React.ReactNode = <></>
   const CusAvatar = message.source !== 0 && message.avatar ?
     <Image src={message.avatar} className={"w-8  h-8 rounded self-start"} />
@@ -25,31 +28,33 @@ const Index: React.FC<{
     case "notice":
       return <Notice message={message} />
     case "text":
-      item =  <Text content={message.content} />
+      item =  <Wrapper direction={direction} background><Text content={message.content} /></Wrapper>
       break
     case "image":
-      item = <ImageMsg content={message.content} />
+      item = <Wrapper direction={direction}><ImageMsg content={message.content} /></Wrapper>
       break
     case "navigator":
-      item =  <Navigator content={message.content} />
+      item =  <Wrapper direction={direction}><Navigator content={message.content} /></Wrapper>
+      break
+    case "audio":
+      item = <Wrapper direction={direction}  background><Audio content={message.content} /></Wrapper>
+      break
+    case "video":
+      item = <Wrapper direction={direction}  background><Video content={message.content} /></Wrapper>
       break
     default:
   }
-  return <View className={classNames("flex items-center mt-2", {
+  return <View className={classNames("flex items-start mt-2", {
     "flex-row-reverse": direction === "right",
   })}>
     <View className={"px-1 flex-shrink-0 self-start"}>
       {CusAvatar}
     </View>
-    <View className={classNames("flex max-w-[60%] overflow-hidden flex-col items-start", {
-      "items-end": direction === "right",
-    })}>
+    <View className={classNames("flex max-w-[60%] overflow-hidden flex-col items-start")}>
       {name}
-      <Wrapper direction={direction} background={message.type === "text"}>
-        {item}
-      </Wrapper>
+      {item}
       {
-        direction === "right" && <View className={classNames("text-xs ", {
+        showRead && direction === "right" && <View className={classNames("text-xs ", {
           "text-gray-600": message.is_read === true,
           "text-red-600" : message.is_read === false || message.is_read === undefined
         })}>

@@ -24,7 +24,7 @@ const Index = () => {
   }, [])
 
 
-  const send = React.useContext(context)
+  const action = React.useContext(context)
 
 
   const selectImg = React.useCallback(() => {
@@ -35,36 +35,34 @@ const Index = () => {
             Authorization: 'Bearer ' + getToken()
           },
           name: "file",
-          url: BASE_URL + "/ws/image",
+          url: BASE_URL + "/chat/files",
           filePath: path
         }).then(r => {
-          if (send) {
-            const result: APP.Resp<APP.ImageResp> = JSON.parse(r.data)
-            if (result.success) {
-              newAction(result.data.url, 'image').then(act => {
-                send(act).then().catch()
-              })
-            }
+          const result: APP.Resp<APP.File> = JSON.parse(r.data)
+          if (result.success) {
+            newAction(result.data.url, 'image').then(act => {
+              action.send && action.send(act).then().catch()
+            })
           }
         })
       })
     })
-  }, [send])
+  }, [action.send])
 
   return (
     <View className={classNames(`border-t border-solid flex flex-shrink-0 items-center bg-[#F5F6F7]`, {
       "pb-9": isIphonex
     })}>
-      <View className={"w-[80%] p-2 text-xl"}>
+      <View className={"w-[83%] p-2 text-xl"}>
         <Input cursorSpacing={20}
           value={value}
                className={"bg-white p-1 rounded"}
           onInput={e => setValue(e.detail.value)}
           confirmHold
           onConfirm={e => {
-                 if (send && e.detail.value.length > 0) {
+                 if (e.detail.value.length > 0) {
                    newAction(e.detail.value).then(act => {
-                     send(act).then(() => {
+                     action.send && action.send(act).then(() => {
                        setValue('')
                      })
                    })
@@ -73,7 +71,7 @@ const Index = () => {
         />
       </View>
       <View className={"flex justify-between"}>
-        <Image src={PictureImg} className={"w-10 h-auto flex"} mode='widthFix' onClick={selectImg} />
+        <Image src={PictureImg} className={"w-8 h-auto flex"} mode='widthFix' onClick={selectImg} />
       </View>
     </View>
   )

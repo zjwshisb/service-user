@@ -1,13 +1,13 @@
 import { Provider } from 'mobx-react'
 
-import counterStore from './store/counter'
+import settingStore from './store/setting'
 
 
 import './app.less'
 import React from "react";
 
 const store = {
-  counterStore
+  settingStore
 }
 
 const index :React.FC<React.PropsWithChildren> = (props) => {

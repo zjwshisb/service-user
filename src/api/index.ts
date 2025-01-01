@@ -26,6 +26,14 @@ export const getMessages = ( size = 20, id?: number) => {
     data
   })
 }
+
+
+export const getSetting = ( ) => {
+  return request<APP.ChatSetting>({
+    url: '/chat/setting',
+  })
+}
+
 export const handleRead = (msgId: number) => {
   return request({
     url: '/chat/read',

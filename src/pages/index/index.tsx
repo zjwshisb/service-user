@@ -1,7 +1,7 @@
 import React from 'react'
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
-import {getMessages, handleRead} from "@/api";
+import {getMessages, getSetting, handleRead} from "@/api";
 import {getToken} from "@/util/auth";
 import {isH5, isWeapp} from "@/util/env";
 
@@ -23,6 +23,14 @@ const Index = () => {
   const [task, setTask] = React.useState<Taro.SocketTask | undefined>()
 
   const [waitingCount, setWaitingCount] = React.useState<number>(0)
+
+  const [setting, setSetting] = React.useState<APP.ChatSetting>()
+
+  React.useEffect(() => {
+    getSetting().then(r => {
+      setSetting(r.data)
+    })
+  }, [])
 
   // 控制滚动条滚动到底部
   const [toTop, setToTop] = React.useState(false)
@@ -75,6 +83,14 @@ const Index = () => {
               }
               case "read": {
                 const msgIds = action.data as number[]
+                setMessages(prevState => {
+                  for (const x of prevState) {
+                    if (msgIds.includes(x.id as number)) {
+                      x.is_read = true
+                    }
+                  }
+                  return [...prevState]
+                })
                 break;
               }
               case "waiting-user-count": {
@@ -222,10 +238,13 @@ const Index = () => {
   }, [])
 
   return (
-    <SendContext.Provider value={send}>
+    <SendContext.Provider value={{
+      send,
+      ...setting
+    }}>
       <View className={"flex flex-col justify-between w-full bg-[#f5f5f5] overflow-hidden"} style={cusStyles}>
         {
-          waitingCount > 0 &&  <View className={"text-base bg-[#fcf6ed] text-[#de8c17] p-1"}>
+          setting?.is_show_queue  && waitingCount > 0 && <View className={"text-base bg-[#fcf6ed] text-[#de8c17] p-1"}>
             前面还有{waitingCount}人在等待
           </View>
         }
@@ -235,7 +254,6 @@ const Index = () => {
               loading &&
               <View className={"p-1 text-base text-center"}>
                 loading...
-                {/*<AtActivityIndicator color='#999999' size={25} content='加载中' mode='center' />*/}
               </View>
             }
             {
