@@ -1,5 +1,9 @@
 import type { UserConfigExport } from "@tarojs/cli";
 export default {
+  defineConstants: {
+    BASE_URL: '"http://120.77.242.145:8080/api/user"',
+    WS_URL: '"ws://120.77.242.145:8080/api/user/chat/ws"'
+  },
   mini: {},
   h5: {
     /**
@@ -29,4 +33,4 @@ export default {
     //     }))
     // }
   }
-} satisfies UserConfigExport<'vite'>
+} satisfies UserConfigExport<'webpack5'>

@@ -9,6 +9,9 @@
 
 ### 演示地址
 
-小水管: [http://119.29.196.153/mobile](http://119.29.196.153/mobile)  
+小水管: [http://120.77.242.145/mobile](http://120.77.242.145/mobile)  
 账号: user(1-20) #user1-user20  
 密码: user(1-20) #user1-user20
+
+### 更新记录 
+2025.1.5 update taro to 4.0.7
