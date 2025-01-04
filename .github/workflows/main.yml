@@ -13,10 +13,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: install yarn
+        run: npm install -g yarn
       - name: install taro
         run: npm install -g @tarojs/cli@4.0.7
       - name: install deps
-        run: npm install
+        run: yarn
       - name: build
         run: npm run build:h5
       - name: copy file via ssh password
