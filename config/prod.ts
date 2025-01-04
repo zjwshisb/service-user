@@ -6,6 +6,7 @@ export default {
   },
   mini: {},
   h5: {
+    publicPath: '/mobile/'
     /**
      * WebpackChain 插件配置
      * @docs https://github.com/neutrinojs/webpack-chain
