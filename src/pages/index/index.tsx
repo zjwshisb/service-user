@@ -8,6 +8,7 @@ import {isH5, isWeapp} from "@/util/env";
 import SendContext from './context'
 import Input from './components/Input'
 import MessageContainer from './components/MessageContainer/index'
+import classNames from "classnames";
 
 
 const pageSize = 30
@@ -242,13 +243,15 @@ const Index = () => {
       send,
       ...setting
     }}>
-      <View className={"flex flex-col justify-between w-full bg-[#f5f5f5] overflow-hidden"} style={cusStyles}>
-        {
-          setting?.is_show_queue  && waitingCount > 0 && <View className={"text-base bg-[#fcf6ed] text-[#de8c17] p-1"}>
-            前面还有{waitingCount}人在等待
-          </View>
-        }
-        <View className={"overflow-hidden flex"}>
+      {
+        setting?.is_show_queue  && waitingCount > 0 && <View className={"fixed px-1 h-6 flex items-center w-full text-xs bg-[#fcf6ed] text-[#de8c17]"}>
+          前面还有{waitingCount}人在等待
+        </View>
+      }
+      <View className={classNames("flex flex-col justify-between w-full bg-[#f5f5f5] overflow-hidden box-border", {
+        "pt-6": setting?.is_show_queue  && waitingCount > 0
+      })} style={cusStyles}>
+        <View className={"overflow-hidden flex w-full self-end"}>
           <MessageContainer messages={messages} top={toTop} onScrollTop={getMoreMessage}>
             {
               loading &&
