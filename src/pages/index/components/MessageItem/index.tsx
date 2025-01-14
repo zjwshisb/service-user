@@ -50,7 +50,10 @@ const Index: React.FC<{
     <View className={"px-1 flex-shrink-0 self-start"}>
       {CusAvatar}
     </View>
-    <View className={classNames("flex max-w-[60%] overflow-hidden flex-col items-start")}>
+    <View className={classNames("flex max-w-[60%] overflow-hidden flex-col", {
+      "items-end": direction === "right",
+      "items-start": direction === "left"
+    })}>
       {name}
       {item}
       {
