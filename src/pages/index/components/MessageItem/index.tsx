@@ -8,6 +8,7 @@ import Avatar from '@/components/UserAvatar/Index'
 import Notice from './components/Notice'
 import Audio from './components/Audio'
 import Video from './components/Video'
+import Pdf from './components/Pdf'
 import classNames from "classnames";
 
 const Index: React.FC<{
@@ -41,6 +42,9 @@ const Index: React.FC<{
       break
     case "video":
       item = <Wrapper direction={direction}  background><Video content={message.content} /></Wrapper>
+      break
+    case "pdf":
+      item = <Wrapper direction={direction}><Pdf content={message.content} /></Wrapper>
       break
     default:
   }
