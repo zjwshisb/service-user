@@ -200,8 +200,11 @@ const Index = () => {
   }, [close, init])
 
 
+  const fetchLock = React.useRef(false)
+
   const getMoreMessage = React.useCallback(async () => {
-    if (!loading && !noMore) {
+    if (!fetchLock.current && !noMore) {
+      fetchLock.current = true
       setLoading(true)
       if (messages.length > 0) {
         const id = messages[messages.length - 1].id
@@ -215,8 +218,8 @@ const Index = () => {
             if (res.data.length < pageSize) {
               setNoMore(true)
             }
+            fetchLock.current = false
           } catch (e) {
-
           }
         }
       }
